@@ -34,7 +34,9 @@ func main() {
 }*/
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 import "math"
 
 func hipotenusa(lado1, lado2 float64) float64 {
