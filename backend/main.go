@@ -1,11 +1,12 @@
 package main
 
-import (
-	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/controllers"
-	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/domain"
-)
+import ()
 
-func mostrar(user domain.Usuario) {
+func main() {
+
+}
+
+/*func mostrar(user domain.Usuario) {
 	println(user.ID_usuario, "\n",
 		user.Mail,
 		user.Contraseña)
@@ -23,4 +24,4 @@ func main() {
 	}
 	var user = controllers.RegisterUser(usuario1)
 	mostrar(user)
-}
+}*/
