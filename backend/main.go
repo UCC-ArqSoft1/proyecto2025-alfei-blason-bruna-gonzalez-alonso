@@ -1,9 +1,14 @@
 package main
 
-import ()
+import (
+	"github.com/gin-gonic/gin"
+	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/controllers"
+)
 
 func main() {
-
+	router := gin.New()
+	router.POST("/users/login", controllers.Login)
+	router.Run(":8080")
 }
 
 /*func mostrar(user domain.Usuario) {

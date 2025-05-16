@@ -7,27 +7,34 @@ type ActDeportiva struct {
 	Cupos          int    `json:"cupos"`
 	IdCategoria    int    `json:"category"`
 }
-
 type Usuario struct {
-	ID_usuario     int
-	Nombre         string
-	Apellido       string
-	Nombre_usuario string
-	DNI            int
-	Mail           string
-	Contrasenia    string
-	Is_admin       bool
+	IDUsuario     int    `json:"id" gorm:"primary_key"`
+	Nombre        string `json:"name"`
+	Apellido      string `json:"lastname"`
+	NombreUsuario string `json:"username"`
+	DNI           int    `json:"dni"`
+	Mail          string `json:"mail"`
+	Contrasenia   string `json:"password"`
+	IsAdmin       bool   `json:"admin: "`
 }
 
 type Horario struct {
-	Id_horario     int
-	Dia            []string
-	Horario_inicio []string
-	Horario_fin    []string
+	IdHorario     int      `json:"id" gorm:"primary_key"`
+	Dia           []string `json:"days"`
+	HorarioInicio []string `json:"hourstart"`
+	HorarioFin    []string `json:"hourfinish"`
+	IdActividad   int      `json:"activity"`
 }
-type Token struct {
-	Tiempo   int
-	Id_token int
-	Activo   bool
-	Token    string
+type Inscripcion struct {
+	IdInscripcion int      `json:"id" gorm:"primary_key"`
+	IdUsuario     int      `json:"user"`
+	IdActividad   int      `json:"activity"`
+	Dia           []string `json:"days"`
+	HorarioInicio []string `json:"hourstart"`
+	HorarioFin    []string `json:"hourfinish"`
+}
+
+type Categoria struct {
+	IdCategoria int    `json:"id" gorm:"primary_key"`
+	Nombre      string `json:"name"`
 }

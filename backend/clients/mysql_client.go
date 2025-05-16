@@ -29,6 +29,11 @@ func init() {
 	}
 
 	DB.AutoMigrate(&dao.Usuario{})
+	DB.AutoMigrate(&dao.Horario{})
+	DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
+	DB.AutoMigrate(&dao.Inscripcion{})
+	DB.AutoMigrate(&dao.Categoria{})
+
 	DB.Create(&dao.Usuario{
 		IDUsuario:       1,
 		NombreUsuario:   "mateo123",
