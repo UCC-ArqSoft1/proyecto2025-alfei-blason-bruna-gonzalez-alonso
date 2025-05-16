@@ -30,13 +30,16 @@ func init() {
 	DB.AutoMigrate(&dao.Usuario{})
 	DB.Create(&dao.Usuario{
 		ID_usuario:      1,
-		Mail:            "emiliano",
+		Nombre_usuario:  "emiliano",
 		Contraseniahash: "mateo",
 	})
 }
-func GetUserByUsername(username string) dao.Usuario {
+func GetUserByUsername(username string) (dao.Usuario, error) {
 	var user dao.Usuario
 	// SELECT * FROM users WHERE username = ? LIMIT 1
-	DB.First(&user, "username = ?", username)
-	return user
+	txn := DB.First(&user, "username = ?", username)
+	if txn.Error != nil {
+		return dao.Usuario{}, fmt.Errorf("error getting user: %w", txn.Error)
+	}
+	return user, nil
 }
