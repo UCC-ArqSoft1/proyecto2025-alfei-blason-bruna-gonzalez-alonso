@@ -11,12 +11,12 @@ func Login(username string, password string) (int, string, error) {
 	if err != nil {
 		return 0, "", fmt.Errorf("error getting user: %w", err)
 	}
-	if Utils.HashSHA256(password) != userDAO.Contraseniahash {
+	if Utils.HashSHA256(password) != userDAO.ContraseniaHash {
 		return 0, "", fmt.Errorf("invalid password")
 	}
-	token, err := Utils.GenerateJWT(userDAO.ID_usuario)
+	token, err := Utils.GenerateJWT(userDAO.IDUsuario)
 	if err != nil {
 		return 0, "", fmt.Errorf("error generating token: %w", err)
 	}
-	return userDAO.ID_usuario, token, nil
+	return userDAO.IDUsuario, token, nil
 }

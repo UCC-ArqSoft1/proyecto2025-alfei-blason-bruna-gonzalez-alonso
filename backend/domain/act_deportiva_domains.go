@@ -1,12 +1,11 @@
 package domain
 
 type ActDeportiva struct {
-	ID_actividad    int
-	Nombre          string
-	Nombre_profesor string
-	Id_usuario      int
-	Cupos           int
-	Id_horario      int
+	IDActividad    int    `json:"id" gorm:"primary_key"`
+	Nombre         string `json:"name"`
+	NombreProfesor string `json:"professor"`
+	Cupos          int    `json:"cupos"`
+	IdCategoria    int    `json:"category"`
 }
 
 type Usuario struct {
