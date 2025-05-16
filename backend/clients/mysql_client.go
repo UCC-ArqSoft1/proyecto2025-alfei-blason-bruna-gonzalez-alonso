@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/Utils"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
 )
 
@@ -28,7 +27,7 @@ func init() {
 		panic(fmt.Sprintf("error connecting to DB: %v", err))
 	}
 
-	DB.AutoMigrate(&dao.Usuario{})
+	/*DB.AutoMigrate(&dao.Usuario{})
 	DB.AutoMigrate(&dao.Horario{})
 	DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
 	DB.AutoMigrate(&dao.Inscripcion{})
@@ -112,12 +111,12 @@ func init() {
 		HorarioInicio: "10:00",
 		HorarioFin:    "12:00",
 	})
-
+	*/
 }
 func GetUserByUsername(username string) (dao.Usuario, error) {
 	var user dao.Usuario
 	// SELECT * FROM users WHERE username = ? LIMIT 1
-	txn := DB.First(&user, "username = ?", username)
+	txn := DB.First(&user, "nombre_usuario = ?", username)
 	if txn.Error != nil {
 		return dao.Usuario{}, fmt.Errorf("error getting user: %w", txn.Error)
 	}

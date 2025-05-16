@@ -7,6 +7,7 @@ import (
 
 func main() {
 	router := gin.New()
+	router.Use(controllers.CORS)
 	router.POST("/users/login", controllers.Login)
 	router.Run(":8080")
 }

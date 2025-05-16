@@ -3,27 +3,31 @@ import './Login.css';
 
 function Login() {
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [usuario, setUsuario] = useState("");
+    const [contrasenia, setContrasenia] = useState("");
 
 
     const changeUsername = async (e) => {
         console.log(e.target.value);
-        setUsername(e.target.value);
+        setUsuario(e.target.value);
     }
     const changePassword = async (e) => {
         console.log(e.target.value);
-        setPassword(e.target.value);
+        setContrasenia(e.target.value);
     }
     const send = async (e) => {
         console.log("Llamando al backend")
-        const response = await fetch("http://localhost:8080/login", {
+        const response = await fetch("http://localhost:8080/users/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ usuario, contrasenia }),
         });
+
+        const data = await response.json();
+
+        console.log(data);
     }
     return (
         <div className="Login">
