@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/services"
+	"strconv"
 )
 
 /*
@@ -32,14 +33,14 @@ type ActIDActividad struct {
 }
 
 func ObtenerAct(ctx *gin.Context) {
-	var req ActIDActividad
+	idParam := ctx.Param("id")
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "JSON inválido"})
+	IDactividad, err := strconv.Atoi(idParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
 		return
 	}
-
-	IDactivity, Nombreact, err, Nombreprofesor, cupos := services.GetAct(req.IDactividad)
+	IDactivity, Nombreact, err, Nombreprofesor, cupos := services.GetAct(IDactividad)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
