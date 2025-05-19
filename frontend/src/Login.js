@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import './Login.css';
+import { useNavigate } from "react-router-dom";
+
 
 function Login() {
 
     const [usuario, setUsuario] = useState("");
     const [contrasenia, setContrasenia] = useState("");
+    const navigate = useNavigate();
+
 
 
     const changeUsername = async (e) => {
@@ -16,18 +20,32 @@ function Login() {
         setContrasenia(e.target.value);
     }
     const send = async (e) => {
-        console.log("Llamando al backend")
-        const response = await fetch("http://localhost:8080/users/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ usuario, contrasenia }),
-        });
+        const send = async (e) => {
+            e.preventDefault(); // importante para evitar recargar la página
+            console.log("Llamando al backend");
 
-        const data = await response.json();
+            try {
+                const response = await fetch("http://localhost:8080/users/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ usuario, contrasenia }),
+                });
 
-        console.log(data);
+                if (!response.ok) throw new Error("Error en login");
+
+                const data = await response.json();
+                console.log(data);
+
+                // ✅ Redirigir si fue exitoso
+                navigate("/Activities");
+            } catch (error) {
+                console.error("Login fallido", error);
+                alert("Credenciales incorrectas");
+            }
+        };
+
     }
     return (
         <div className="Login">
