@@ -19,7 +19,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	user, token, err := services.Login(req.Nombre_usuario, req.Contrasenia)
+	user, token, err, IsAdmin := services.Login(req.Nombre_usuario, req.Contrasenia)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -30,6 +30,7 @@ func Login(ctx *gin.Context) {
 		"message": "Login exitoso",
 		"usuario": user,
 		"token":   token, // en el paso 3 lo agregamos
+		"isAdmin": IsAdmin,
 	})
 }
 func CORS(ctx *gin.Context) {

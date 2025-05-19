@@ -122,3 +122,12 @@ func GetUserByUsername(username string) (dao.Usuario, error) {
 	}
 	return user, nil
 }
+func GetActbyId(ID int) (dao.ActDeportiva, error) {
+	var Act dao.ActDeportiva
+
+	txn := DB.First(&Act, "id_actividad = ?", ID)
+	if txn.Error != nil {
+		return dao.ActDeportiva{}, fmt.Errorf("error getting Activity: %w", txn.Error)
+	}
+	return Act, nil
+}
