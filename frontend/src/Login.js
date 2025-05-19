@@ -20,7 +20,7 @@ function Login() {
         setContrasenia(e.target.value);
     }
     const send = async (e) => {
-        const send = async (e) => {
+      //  const send = async (e) => {
             e.preventDefault(); // importante para evitar recargar la página
             console.log("Llamando al backend");
 
@@ -44,7 +44,7 @@ function Login() {
                 console.error("Login fallido", error);
                 alert("Credenciales incorrectas");
             }
-        };
+       // };
 
     }
     return (
