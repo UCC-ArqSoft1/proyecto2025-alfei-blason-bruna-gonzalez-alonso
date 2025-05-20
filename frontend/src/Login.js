@@ -56,10 +56,10 @@ function Login() {
                 <form onSubmit={send}>
                     <input type="text" name="username" placeholder="Nombre de usuario"
                            onChange={changeUsername}/><br/>
-                    <input type="password" name="password" placeholder="Contrasea"
+                    <input type="password" name="password" placeholder="Contraseña"
                            onChange={changePassword}/>
 
-                    <input type="submit" value="Login"/>
+                    <input type="submit" value="Login" className="botonInicio"/>
                 </form>
             </div>
         </header>
