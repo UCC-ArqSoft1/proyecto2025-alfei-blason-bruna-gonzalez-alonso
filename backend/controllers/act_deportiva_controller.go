@@ -40,7 +40,7 @@ func ObtenerAct(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
 		return
 	}
-	IDactivity, Nombreact, err, Nombreprofesor, cupos := services.GetAct(IDactividad)
+	IDactivity, Nombreact, err, Nombreprofesor, cupos, horarios := services.GetAct(IDactividad)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -52,6 +52,7 @@ func ObtenerAct(ctx *gin.Context) {
 		"NombreActividad": Nombreact,
 		"NombreProfesor":  Nombreprofesor,
 		"Cupos":           cupos,
+		"Horarios":        horarios,
 	})
 }
 func ObtenerTodasAct(ctx *gin.Context) {

@@ -145,3 +145,9 @@ func GetActs() ([]dao.ActDeportiva, error) {
 	}
 	return Act, nil
 }
+
+func GetHorariosByActividad(idActividad int) ([]dao.Horario, error) {
+	var horarios []dao.Horario
+	err := DB.Where("id_actividad = ?", idActividad).Find(&horarios).Error
+	return horarios, err
+}
