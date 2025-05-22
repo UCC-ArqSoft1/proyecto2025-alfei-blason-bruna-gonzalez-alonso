@@ -7,3 +7,8 @@ type Horario struct {
 	HorarioInicio string
 	HorarioFin    string
 }
+
+type ActConHorarios struct {
+	Actividad ActDeportiva `json:"actividad"`
+	Horarios  []Horario    `json:"horarios"`
+}
