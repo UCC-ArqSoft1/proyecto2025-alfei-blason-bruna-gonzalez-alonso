@@ -54,3 +54,12 @@ func ObtenerAct(ctx *gin.Context) {
 		"Cupos":           cupos,
 	})
 }
+func ObtenerTodasAct(ctx *gin.Context) {
+
+	Actividades, err := services.GetTodasAct()
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, Actividades)
+}

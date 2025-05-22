@@ -12,16 +12,16 @@ var (
 )
 
 func init() {
-	user := "root"
+	/*user := "root"
 	password := "Agus2025uccBD-"
 	host := "localhost"
 	port := 3306
-	database := "backend"
-	/*user := "root"
+	database := "backend"*/
+	user := "root"
 	password := "17122004Ff"
 	host := "localhost"
 	port := 3306
-	database := "backend"*/
+	database := "backend"
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?parseTime=true&charset=utf8mb4&loc=Local",
 		user, password, host, port, database)
@@ -133,6 +133,15 @@ func GetActbyId(ID int) (dao.ActDeportiva, error) {
 	txn := DB.First(&Act, "id_actividad = ?", ID)
 	if txn.Error != nil {
 		return dao.ActDeportiva{}, fmt.Errorf("error getting Activity: %w", txn.Error)
+	}
+	return Act, nil
+}
+func GetActs() ([]dao.ActDeportiva, error) {
+	var Act []dao.ActDeportiva
+
+	txn := DB.Find(&Act)
+	if txn.Error != nil {
+		return []dao.ActDeportiva{}, fmt.Errorf("error getting Activity: %w", txn.Error)
 	}
 	return Act, nil
 }
