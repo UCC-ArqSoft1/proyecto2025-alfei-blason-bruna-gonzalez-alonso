@@ -1,27 +1,54 @@
 import React, { useEffect, useState } from "react";
+import "./Activities.css"; // Asegúrate que esté en la misma carpeta que Activities.js
 
 function Activities() {
-    const [actividad, setActividad] = useState(null);
+    const [actividades, setActividades] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredActividades, setFilteredActividades] = useState([]);
 
     useEffect(() => {
-        // Por ejemplo, pedimos la actividad con ID 2
-        fetch("http://localhost:8080/act_deportiva/2")
+        fetch("http://localhost:8080/act_deportiva") // Ajustar si es necesario
             .then(res => res.json())
-            .then(data => setActividad(data))
+            .then(data => {
+                setActividades(data);
+                setFilteredActividades(data);
+            })
             .catch(err => console.error(err));
     }, []);
 
+    useEffect(() => {
+        const term = searchTerm.toLowerCase();
+        const filtered = actividades.filter(act =>
+            act.Nombre.toLowerCase().includes(term) ||
+            act.NombreProfesor.toLowerCase().includes(term) ||
+            (act.Horario && act.Horario.toLowerCase().includes(term))
+        );
+        setFilteredActividades(filtered);
+    }, [searchTerm, actividades]);
+
     return (
-        <div style={{ padding: "2rem" }}>
-            <h1>Bienvenido a la página de Actividades</h1>
-            {actividad ? (
-                <div>
-                    <p><strong>Actividad:</strong> {actividad.NombreActividad}</p>
-                    <p><strong>Profesor:</strong> {actividad.NombreProfesor}</p>
-                    <p><strong>Cupos:</strong> {actividad.Cupos}</p>
-                </div>
+        <div className="container">
+            <h1 className="title">Bienvenido a la página de Actividades</h1>
+
+            <input
+                type="text"
+                placeholder="Buscar por palabra clave, horario o profesor"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className="search-input"
+            />
+
+            {filteredActividades.length === 0 ? (
+                <p>No se encontraron actividades.</p>
             ) : (
-                <p>Cargando actividad...</p>
+                filteredActividades.map(act => (
+                    <div key={act.IDactividad} className="activity-card">
+                        <p><strong>Actividad:</strong> {act.Nombre}</p>
+                        <p><strong>Profesor:</strong> {act.NombreProfesor}</p>
+                        <p><strong>Cupos:</strong> {act.Cupos}</p>
+                        {act.Horario && <p><strong>Horario:</strong> {act.Horario}</p>}
+                    </div>
+                ))
             )}
         </div>
     );

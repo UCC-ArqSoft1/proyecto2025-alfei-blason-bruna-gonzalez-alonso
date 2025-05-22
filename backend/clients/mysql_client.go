@@ -12,16 +12,16 @@ var (
 )
 
 func init() {
-	/*user := "root"
+	user := "root"
 	password := "Agus2025uccBD-"
 	host := "localhost"
 	port := 3306
-	database := "backend"*/
-	user := "root"
+	database := "backend"
+	/*user := "root"
 	password := "17122004Ff"
 	host := "localhost"
 	port := 3306
-	database := "backend"
+	database := "backend"*/
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?parseTime=true&charset=utf8mb4&loc=Local",
 		user, password, host, port, database)
