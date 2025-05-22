@@ -20,7 +20,7 @@ func GetTodasAct() ([]dao.ActDeportiva, error) {
 		return []dao.ActDeportiva{}, fmt.Errorf("error getting Activity: %w", err)
 	}
 	return ActDAO, nil
-}
+}*/
 func GetAct(IDact int) (int, string, error, string, int, []dao.Horario) {
 	ActDAO, err := clients.GetActbyId(IDact)
 	if err != nil {
