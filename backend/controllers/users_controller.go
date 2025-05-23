@@ -59,3 +59,31 @@ func GetActInscripcion(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, actividades)
 }
+
+type InscricionReq struct {
+	IdActividad int `json:"id_actividad"`
+	IdHorario   int `json:"id_horario"`
+}
+
+func InscripcionActividad(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	IDusuario, err := strconv.Atoi(idParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id del usuario invalido"})
+		return
+	}
+
+	var req InscricionReq
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "JSON inválido"})
+		return
+	}
+
+	err = services.InscripcionAct(IDusuario, req.IdActividad, req.IdHorario)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "Incripcion exitosa"})
+}

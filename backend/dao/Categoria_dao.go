@@ -1,6 +1,6 @@
 package dao
 
 type Categoria struct {
-	IDCategoria int `gorm:"primary_key"`
+	IDCategoria int `gorm:"primary_key",autoIncrement`
 	Nombre      string
 }

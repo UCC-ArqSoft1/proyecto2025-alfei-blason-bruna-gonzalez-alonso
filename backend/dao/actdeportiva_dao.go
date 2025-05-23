@@ -1,7 +1,7 @@
 package dao
 
 type ActDeportiva struct {
-	IDActividad    int ` gorm:"primary_key"`
+	IDActividad    int ` gorm:"primary_key",autoIncrement`
 	Nombre         string
 	NombreProfesor string
 	Cupos          int

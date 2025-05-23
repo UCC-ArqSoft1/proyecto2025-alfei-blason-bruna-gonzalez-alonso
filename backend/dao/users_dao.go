@@ -1,7 +1,7 @@
 package dao
 
 type Usuario struct {
-	IDUsuario       int    ` gorm:"primary_key"`
+	IDUsuario       int    ` gorm:"primary_key",autoIncrement`
 	NombreUsuario   string `gorm:"unique"`
 	ContraseniaHash string `gorm:"not_null"`
 	Nombre          string
