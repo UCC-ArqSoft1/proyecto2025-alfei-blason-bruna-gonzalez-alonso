@@ -29,3 +29,10 @@ func GetActInscripto(IDuser int) ([]dao.ActDeportiva, error) {
 	}
 	return ActDAO, nil
 }
+func InscripcionAct(IDuser int, IDact int, IDhrario int) error {
+	err := clients.GenerarInscripcion(IDuser, IDact, IDhrario)
+	if err != nil {
+		return fmt.Errorf("error generando inscripcion: %w", err)
+	}
+	return nil
+}

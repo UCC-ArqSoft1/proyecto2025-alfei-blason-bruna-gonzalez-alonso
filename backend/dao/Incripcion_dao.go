@@ -1,7 +1,7 @@
 package dao
 
 type Inscripcion struct {
-	IdInscripcion int `gorm:"primary_key"`
+	IdInscripcion int `gorm:"primary_key",autoIncrement`
 	IdUsuario     int
 	IdActividad   int
 	IdHorario     int

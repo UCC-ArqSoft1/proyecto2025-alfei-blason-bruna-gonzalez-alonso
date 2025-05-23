@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/Utils"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
 )
 
@@ -31,8 +32,7 @@ func init() {
 	if err != nil {
 		panic(fmt.Sprintf("error connecting to DB: %v", err))
 	}
-
-	/*DB.AutoMigrate(&dao.Usuario{})
+	DB.AutoMigrate(&dao.Usuario{})
 	DB.AutoMigrate(&dao.Horario{})
 	DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
 	DB.AutoMigrate(&dao.Inscripcion{})
@@ -119,7 +119,7 @@ func init() {
 		IdUsuario:     1,
 		IdActividad:   2,
 		IdHorario:     2,
-	})*/
+	})
 }
 
 func GetUserByUsername(username string) (dao.Usuario, error) {
@@ -173,4 +173,15 @@ func GetActInscripcion(IDusuario int) ([]dao.ActDeportiva, error) {
 
 	}
 	return actividades, nil
+}
+func GenerarInscripcion(IDuser int, IDact int, IDhorario int) error {
+	txn := DB.Create(&dao.Inscripcion{
+		IdUsuario:   IDuser,
+		IdActividad: IDact,
+		IdHorario:   IDhorario,
+	})
+	if txn.Error != nil {
+		return fmt.Errorf("Error: No se pudo realizar la inscripcion %w", txn.Error)
+	}
+	return nil
 }
