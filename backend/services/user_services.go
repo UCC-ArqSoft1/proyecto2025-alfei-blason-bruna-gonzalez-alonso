@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/Utils"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/clients"
+	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
 )
 
 func Login(username string, password string) (int, string, error, bool) {
@@ -19,4 +20,12 @@ func Login(username string, password string) (int, string, error, bool) {
 		return 0, "", fmt.Errorf("error generating token: %w", err), false
 	}
 	return userDAO.IDUsuario, token, nil, userDAO.IsAdmin
+}
+
+func GetActInscripto(IDuser int) ([]dao.ActDeportiva, error) {
+	ActDAO, err := clients.GetActInscripcion(IDuser)
+	if err != nil {
+		return []dao.ActDeportiva{}, fmt.Errorf("error getting Act: %w", err)
+	}
+	return ActDAO, nil
 }

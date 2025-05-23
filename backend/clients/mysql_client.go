@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/Utils"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
 )
 
@@ -33,7 +32,7 @@ func init() {
 		panic(fmt.Sprintf("error connecting to DB: %v", err))
 	}
 
-	DB.AutoMigrate(&dao.Usuario{})
+	/*DB.AutoMigrate(&dao.Usuario{})
 	DB.AutoMigrate(&dao.Horario{})
 	DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
 	DB.AutoMigrate(&dao.Inscripcion{})
@@ -120,8 +119,9 @@ func init() {
 		IdUsuario:     1,
 		IdActividad:   2,
 		IdHorario:     2,
-	})
+	})*/
 }
+
 func GetUserByUsername(username string) (dao.Usuario, error) {
 	var user dao.Usuario
 	// SELECT * FROM users WHERE username = ? LIMIT 1
@@ -154,4 +154,23 @@ func GetHorariosByActividad(idActividad int) ([]dao.Horario, error) {
 	var horarios []dao.Horario
 	err := DB.Where("id_actividad = ?", idActividad).Find(&horarios).Error
 	return horarios, err
+}
+
+func GetActInscripcion(IDusuario int) ([]dao.ActDeportiva, error) {
+	var Inscripcion []dao.Inscripcion
+	txn := DB.Where("IDusuario = ?", IDusuario).Find(&Inscripcion).Error
+	if txn.Error != nil {
+		return []dao.ActDeportiva{}, fmt.Errorf("Error: el usuario no se encuentra inscripto %w", txn.Error)
+	}
+
+	var actividades []dao.ActDeportiva //lista que contendra las act a las que esta inscripto el usuario
+	for _, insc := range Inscripcion { //recorre la lista de inscripciones obtenida anteriormente
+		//insc es cada inscr individual
+		var actividad dao.ActDeportiva //cada actividad correspondiente a una inscripcion
+		if err := DB.First(&actividad, "actividad = ?", insc.IdActividad).Error; err == nil {
+			actividades = append(actividades, actividad)
+		}
+
+	}
+	return actividades, nil
 }

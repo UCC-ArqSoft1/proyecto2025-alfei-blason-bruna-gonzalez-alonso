@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/services"
+	"strconv"
 )
 
 type LoginRequest struct {
@@ -42,4 +43,19 @@ func CORS(ctx *gin.Context) {
 		return
 	}
 	ctx.Next()
+}
+
+func GetActInscripcion(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	IDusuario, err := strconv.Atoi(idParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id del usuario invalido"})
+		return
+	}
+	actividades, err := services.GetActInscripto(IDusuario)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, actividades)
 }
