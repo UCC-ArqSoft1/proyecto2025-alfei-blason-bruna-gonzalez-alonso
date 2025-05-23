@@ -1,7 +1,7 @@
 package dao
 
 type Horario struct {
-	IdHorario     int `gorm:"primary_key"`
+	IdHorario     int `gorm:"primary_key",autoIncrement`
 	IdActividad   int
 	Dia           string
 	HorarioInicio string

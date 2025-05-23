@@ -61,8 +61,8 @@ func GetActInscripcion(ctx *gin.Context) {
 }
 
 type InscricionReq struct {
-	IdActividad int `json:id_actividad`
-	IdHorario   int `json:id_horario`
+	IdActividad int `json:"id_actividad"`
+	IdHorario   int `json:"id_horario"`
 }
 
 func InscripcionActividad(ctx *gin.Context) {

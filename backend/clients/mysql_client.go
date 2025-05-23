@@ -39,7 +39,6 @@ func init() {
 	DB.AutoMigrate(&dao.Categoria{})
 
 	DB.Create(&dao.Usuario{
-		IDUsuario:       1,
 		NombreUsuario:   "mateo123",
 		ContraseniaHash: Utils.HashSHA256("mateo"),
 		Nombre:          "mateo",
@@ -50,45 +49,44 @@ func init() {
 	})
 
 	DB.Create(&dao.ActDeportiva{
-		IDActividad:    1,
 		Nombre:         "Spinning",
 		NombreProfesor: "Emiliano",
 		Cupos:          10,
 		IdCategoria:    1,
-		Horarios:       []dao.Horario{dao.Horario{IdHorario: 1}, dao.Horario{IdHorario: 3}},
+		Horarios: []dao.Horario{
+			{
+				Dia:           "Viernes",
+				HorarioInicio: "14:00",
+				HorarioFin:    "15:00",
+			},
+			{
+				Dia:           "Martes",
+				HorarioInicio: "18:00",
+				HorarioFin:    "20:00",
+			},
+		},
 	})
 
 	DB.Create(&dao.ActDeportiva{
-		IDActividad:    2,
 		Nombre:         "Yoga",
 		NombreProfesor: "Juan",
 		Cupos:          10,
 		IdCategoria:    3,
-		Horarios:       []dao.Horario{dao.Horario{IdHorario: 2}},
-	})
-
-	DB.Create(&dao.Horario{
-		IdHorario:     1,
-		Dia:           "Lunes",
-		HorarioInicio: "10:00",
-		HorarioFin:    "12:00",
-	})
-
-	DB.Create(&dao.Horario{
-		IdHorario:     2,
-		Dia:           "Martes",
-		HorarioInicio: "10:00",
-		HorarioFin:    "12:00",
-	})
-	DB.Create(&dao.Horario{
-		IdHorario:     3,
-		Dia:           "Martes",
-		HorarioInicio: "10:00",
-		HorarioFin:    "12:00",
+		Horarios: []dao.Horario{
+			{
+				Dia:           "Lunes",
+				HorarioInicio: "10:00",
+				HorarioFin:    "12:00",
+			},
+			{
+				Dia:           "Lunes",
+				HorarioInicio: "10:00",
+				HorarioFin:    "12:00",
+			},
+		},
 	})
 
 	DB.Create(&dao.Usuario{
-		IDUsuario:       2,
 		Nombre:          "Martina",
 		Apellido:        "Valdo",
 		NombreUsuario:   "Martina123456",
@@ -99,26 +97,22 @@ func init() {
 	})
 
 	DB.Create(&dao.Categoria{
-		IDCategoria: 1,
-		Nombre:      "Musculacion",
+		Nombre: "Musculacion",
 	})
 
 	DB.Create(&dao.Categoria{
-		IDCategoria: 2,
-		Nombre:      "Funcional",
+		Nombre: "Funcional",
 	})
 
 	DB.Create(&dao.Inscripcion{
-		IdInscripcion: 1,
-		IdUsuario:     1,
-		IdActividad:   1,
-		IdHorario:     1,
+		IdUsuario:   1,
+		IdActividad: 1,
+		IdHorario:   1,
 	})
 	DB.Create(&dao.Inscripcion{
-		IdInscripcion: 2,
-		IdUsuario:     1,
-		IdActividad:   2,
-		IdHorario:     2,
+		IdUsuario:   1,
+		IdActividad: 2,
+		IdHorario:   2,
 	})
 }
 
