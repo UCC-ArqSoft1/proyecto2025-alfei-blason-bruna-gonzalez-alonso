@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import Activities from './Activities';
+import Details from './Details';
 import './App.css';
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/activities" element={<Activities />} />
+                <Route path="/activity/:id" element={<Details />} />
             </Routes>
         </Router>
     );

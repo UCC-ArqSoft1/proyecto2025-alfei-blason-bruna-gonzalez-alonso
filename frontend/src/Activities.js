@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
-import "./Activities.css"; // Asegurate de que este archivo exista en la misma carpeta
+import "./Activities.css";
+import {useNavigate} from "react-router-dom";
+
 
 function Activities() {
     const [actividades, setActividades] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredActividades, setFilteredActividades] = useState([]);
+    const navigate = useNavigate();
+
+    const goToDetail = (id) => {
+        navigate(`/activity/${id}`);
+    };
 
     useEffect(() => {
-        fetch("http://localhost:8080/act_deportiva")
-            .then(res => res.json())
+        fetch("http://localhost:8080/act_deportiva")//llama a la api
+            .then(res => res.json())// convierte la respuesta en json
             .then(data => {
                 setActividades(data);
                 setFilteredActividades(data);
-            })
-            .catch(err => console.error(err));
+            })// guarda los datos en los estados
+            .catch(err => console.error(err));// si hay error muestra
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { //filtra los datos cuando cambia el termino de busqueda
         const term = searchTerm.toLowerCase();
         const filtered = actividades.filter(item => {
             const act = item.actividad;
@@ -34,6 +41,7 @@ function Activities() {
         setFilteredActividades(filtered);
     }, [searchTerm, actividades]);
 
+
     return (
         <div className="container">
             <h1 className="title">Bienvenido a la página de Actividades</h1>
@@ -50,7 +58,7 @@ function Activities() {
                 <p>No se encontraron actividades.</p>
             ) : (
                 filteredActividades.map((item, index) => (
-                    <div key={index} className="activity-card">
+                    <div key={index} className="activity-card" onClick={() => goToDetail(item.actividad.IDActividad)}>
                         <p><strong>Actividad:</strong> {item.actividad.Nombre}</p>
                         <p><strong>Profesor:</strong> {item.actividad.NombreProfesor}</p>
                         <p><strong>Cupos:</strong> {item.actividad.Cupos}</p>

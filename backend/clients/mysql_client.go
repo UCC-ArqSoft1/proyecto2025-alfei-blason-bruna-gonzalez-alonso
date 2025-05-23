@@ -12,16 +12,16 @@ var (
 )
 
 func init() {
-	/*user := "root"
+	user := "root"
 	password := "Agus2025uccBD-"
 	host := "localhost"
 	port := 3306
-	database := "backend"*/
-	user := "root"
+	database := "backend"
+	/*user := "root"
 	password := "17122004Ff"
 	host := "localhost"
 	port := 3306
-	database := "backend"
+	database := "backend"*/
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?parseTime=true&charset=utf8mb4&loc=Local",
 		user, password, host, port, database)
@@ -31,95 +31,95 @@ func init() {
 	if err != nil {
 		panic(fmt.Sprintf("error connecting to DB: %v", err))
 	}
+	/*
+		DB.AutoMigrate(&dao.Usuario{})
+		DB.AutoMigrate(&dao.Horario{})
+		DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
+		DB.AutoMigrate(&dao.Inscripcion{})
+		DB.AutoMigrate(&dao.Categoria{})
 
-	/*DB.AutoMigrate(&dao.Usuario{})
-	DB.AutoMigrate(&dao.Horario{})
-	DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
-	DB.AutoMigrate(&dao.Inscripcion{})
-	DB.AutoMigrate(&dao.Categoria{})
+		DB.Create(&dao.Usuario{
+			IDUsuario:       1,
+			NombreUsuario:   "mateo123",
+			ContraseniaHash: Utils.HashSHA256("mateo"),
+			Nombre:          "mateo",
+			Apellido:        "Alfei",
+			DNI:             43928426,
+			Mail:            "mateo123@gmail.com",
+			IsAdmin:         false,
+		})
 
-	DB.Create(&dao.Usuario{
-		IDUsuario:       1,
-		NombreUsuario:   "mateo123",
-		ContraseniaHash: Utils.HashSHA256("mateo"),
-		Nombre:          "mateo",
-		Apellido:        "Alfei",
-		DNI:             43928426,
-		Mail:            "mateo123@gmail.com",
-		IsAdmin:         false,
-	})
+		DB.Create(&dao.ActDeportiva{
+			IDActividad:    1,
+			Nombre:         "Spinning",
+			NombreProfesor: "Emiliano",
+			Cupos:          10,
+			IdCategoria:    1,
+			Horarios:       []dao.Horario{dao.Horario{IdHorario: 1}, dao.Horario{IdHorario: 3}},
+		})
 
-	DB.Create(&dao.ActDeportiva{
-		IDActividad:    1,
-		Nombre:         "Spinning",
-		NombreProfesor: "Emiliano",
-		Cupos:          10,
-		IdCategoria:    1,
-		Horarios:       []dao.Horario{dao.Horario{IdHorario: 1}, dao.Horario{IdHorario: 3}},
-	})
+		DB.Create(&dao.ActDeportiva{
+			IDActividad:    2,
+			Nombre:         "Yoga",
+			NombreProfesor: "Juan",
+			Cupos:          10,
+			IdCategoria:    3,
+			Horarios:       []dao.Horario{dao.Horario{IdHorario: 2}},
+		})
 
-	DB.Create(&dao.ActDeportiva{
-		IDActividad:    2,
-		Nombre:         "Yoga",
-		NombreProfesor: "Juan",
-		Cupos:          10,
-		IdCategoria:    3,
-		Horarios:       []dao.Horario{dao.Horario{IdHorario: 2}},
-	})
+		DB.Create(&dao.Horario{
+			IdHorario:     1,
+			Dia:           "Lunes",
+			HorarioInicio: "10:00",
+			HorarioFin:    "12:00",
+		})
 
-	DB.Create(&dao.Horario{
-		IdHorario:     1,
-		Dia:           "Lunes",
-		HorarioInicio: "10:00",
-		HorarioFin:    "12:00",
-	})
+		DB.Create(&dao.Horario{
+			IdHorario:     2,
+			Dia:           "Martes",
+			HorarioInicio: "10:00",
+			HorarioFin:    "12:00",
+		})
+		DB.Create(&dao.Horario{
+			IdHorario:     3,
+			Dia:           "Martes",
+			HorarioInicio: "10:00",
+			HorarioFin:    "12:00",
+		})
 
-	DB.Create(&dao.Horario{
-		IdHorario:     2,
-		Dia:           "Martes",
-		HorarioInicio: "10:00",
-		HorarioFin:    "12:00",
-	})
-	DB.Create(&dao.Horario{
-		IdHorario:     3,
-		Dia:           "Martes",
-		HorarioInicio: "10:00",
-		HorarioFin:    "12:00",
-	})
+		DB.Create(&dao.Usuario{
+			IDUsuario:       2,
+			Nombre:          "Martina",
+			Apellido:        "Valdo",
+			NombreUsuario:   "Martina123456",
+			DNI:             46032879,
+			Mail:            "mmmm@gmail.com",
+			ContraseniaHash: Utils.HashSHA256("12345"),
+			IsAdmin:         true,
+		})
 
-	DB.Create(&dao.Usuario{
-		IDUsuario:       2,
-		Nombre:          "Martina",
-		Apellido:        "Valdo",
-		NombreUsuario:   "Martina123456",
-		DNI:             46032879,
-		Mail:            "mmmm@gmail.com",
-		ContraseniaHash: Utils.HashSHA256("12345"),
-		IsAdmin:         true,
-	})
+		DB.Create(&dao.Categoria{
+			IDCategoria: 1,
+			Nombre:      "Musculacion",
+		})
 
-	DB.Create(&dao.Categoria{
-		IDCategoria: 1,
-		Nombre:      "Musculacion",
-	})
+		DB.Create(&dao.Categoria{
+			IDCategoria: 2,
+			Nombre:      "Funcional",
+		})
 
-	DB.Create(&dao.Categoria{
-		IDCategoria: 2,
-		Nombre:      "Funcional",
-	})
-
-	DB.Create(&dao.Inscripcion{
-		IdInscripcion: 1,
-		IdUsuario:     1,
-		IdActividad:   1,
-		IdHorario:     1,
-	})
-	DB.Create(&dao.Inscripcion{
-		IdInscripcion: 2,
-		IdUsuario:     1,
-		IdActividad:   2,
-		IdHorario:     2,
-	})*/
+		DB.Create(&dao.Inscripcion{
+			IdInscripcion: 1,
+			IdUsuario:     1,
+			IdActividad:   1,
+			IdHorario:     1,
+		})
+		DB.Create(&dao.Inscripcion{
+			IdInscripcion: 2,
+			IdUsuario:     1,
+			IdActividad:   2,
+			IdHorario:     2,
+		})*/
 }
 
 func GetUserByUsername(username string) (dao.Usuario, error) {
