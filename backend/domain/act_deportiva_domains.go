@@ -26,12 +26,10 @@ type Horario struct {
 	IdActividad   int      `json:"activity"`
 }
 type Inscripcion struct {
-	IdInscripcion int      `json:"id" gorm:"primary_key"`
-	IdUsuario     int      `json:"user"`
-	IdActividad   int      `json:"activity"`
-	Dia           []string `json:"days"`
-	HorarioInicio []string `json:"hourstart"`
-	HorarioFin    []string `json:"hourfinish"`
+	IdInscripcion int `json:"id" gorm:"primary_key"`
+	IdUsuario     int `json:"user"`
+	IdActividad   int `json:"activity"`
+	IdHorario     int `json:"Horario"`
 }
 
 type Categoria struct {
