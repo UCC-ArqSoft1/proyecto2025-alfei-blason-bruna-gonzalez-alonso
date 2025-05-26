@@ -7,4 +7,6 @@ type ActDeportiva struct {
 	Cupos          int
 	IdCategoria    int
 	Horarios       []Horario `gorm:"foreignkey:IdActividad"`
+	foto           string
+	descripcion    string
 }
