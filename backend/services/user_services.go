@@ -22,12 +22,12 @@ func Login(username string, password string) (int, string, error, bool) {
 	return userDAO.IDUsuario, token, nil, userDAO.IsAdmin
 }
 
-func GetActInscripto(IDuser int) ([]dao.ActDeportiva, error) {
-	ActDAO, err := clients.GetActInscripcion(IDuser)
+func GetActInscripto(IDuser int) ([]dao.ActDeportiva, []dao.Horario, error) {
+	ActDAO, Horario, err := clients.GetActInscripcion(IDuser)
 	if err != nil {
-		return []dao.ActDeportiva{}, fmt.Errorf("error getting Act: %w", err)
+		return []dao.ActDeportiva{}, Horario, fmt.Errorf("error getting Act: %w", err)
 	}
-	return ActDAO, nil
+	return ActDAO, Horario, nil
 }
 func InscripcionAct(IDuser int, IDact int, IDhrario int) error {
 	err := clients.GenerarInscripcion(IDuser, IDact, IDhrario)

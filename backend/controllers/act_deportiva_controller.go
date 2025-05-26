@@ -46,3 +46,6 @@ func ObtenerTodasAct(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, Actividades)
 }
+func CrearAct(ctx *gin.Context) {
+
+}

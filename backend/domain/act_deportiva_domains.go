@@ -6,6 +6,8 @@ type ActDeportiva struct {
 	NombreProfesor string `json:"professor"`
 	Cupos          int    `json:"cupos"`
 	IdCategoria    int    `json:"category"`
+	fotoURL        string `json:"fotoURL`
+	descripcion    string `json:"descripcion`
 }
 type Usuario struct {
 	IDUsuario     int    `json:"id" gorm:"primary_key"`
@@ -16,8 +18,8 @@ type Usuario struct {
 	Mail          string `json:"mail"`
 	Contrasenia   string `json:"password"`
 	IsAdmin       bool   `json:"admin: "`
+	fotoURL       string `json:"fotoURL`
 }
-
 type Horario struct {
 	IdHorario     int      `json:"id" gorm:"primary_key"`
 	Dia           []string `json:"days"`

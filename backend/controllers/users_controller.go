@@ -52,12 +52,21 @@ func GetActInscripcion(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id del usuario invalido"})
 		return
 	}
-	actividades, err := services.GetActInscripto(IDusuario)
+	actividades, Horario, err := services.GetActInscripto(IDusuario)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, actividades)
+	for i, act := range actividades {
+		ctx.JSON(http.StatusOK, gin.H{
+			"NombreActividad": act.Nombre,
+			"NombreProfesor":  act.NombreProfesor,
+			"Cupos":           act.Cupos,
+			"Dia":             Horario[i].Dia,
+			"Hora Inicio":     Horario[i].HorarioInicio,
+			"Hora Fin":        Horario[i].HorarioFin,
+		})
+	}
 }
 
 type InscricionReq struct {
