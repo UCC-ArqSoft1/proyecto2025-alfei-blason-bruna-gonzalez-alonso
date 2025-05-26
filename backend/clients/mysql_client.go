@@ -194,3 +194,19 @@ func GenerarInscripcion(IDuser int, IDact int, IDhorario int) error {
 	})
 	return err
 }
+
+func CrearAct(actividad *dao.ActDeportiva) error {
+	txn := DB.Create(actividad)
+	if txn.Error != nil {
+		return fmt.Errorf("Error: No se pudo crear la actividad %w", txn.Error)
+	}
+	return nil
+}
+
+func EliminarAct(IDact int) error {
+	txn := DB.Delete(&dao.ActDeportiva{}, IDact)
+	if txn.Error != nil {
+		return fmt.Errorf("error eliminando actividad con ID %d: %w", IDact, txn.Error)
+	}
+	return nil
+}

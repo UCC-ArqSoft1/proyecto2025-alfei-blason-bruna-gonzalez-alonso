@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/services"
 	"strconv"
 )
@@ -46,6 +47,42 @@ func ObtenerTodasAct(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, Actividades)
 }
-func CrearAct(ctx *gin.Context) {
 
+type Crear struct {
+	Nombre         string `json:"nombre"`
+	NombreProfesor string `json:"nombreProfesor"`
+	Cupos          int    `json:"cupos"`
+	IdCategoria    int    `json:"idCategoria"`
+	Dia            string `json:"Dia"`
+	HorarioInicio  string `json:"horarioInicio"`
+	HorarioFin     string `json:"horarioFin"`
+	Foto           string `json:"foto"`
+	Descripcion    string `json:"descripcion"`
+}
+
+func CrearAct(ctx *gin.Context) {
+	var Act Crear
+	if err := ctx.ShouldBindJSON(&Act); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"Error: ": "JSON invalido"})
+		return
+	}
+	actividad := &dao.ActDeportiva{
+		Nombre:         Act.Nombre,
+		NombreProfesor: Act.Nombre,
+		Cupos:          Act.Cupos,
+		IdCategoria:    Act.IdCategoria,
+		Horarios: []dao.Horario{{
+			Dia:           Act.Dia,
+			HorarioInicio: Act.HorarioInicio,
+			HorarioFin:    Act.HorarioFin,
+		}},
+		Foto:        Act.Foto,
+		Descripcion: Act.Descripcion,
+	}
+	err := services.CrearActividad(actividad)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "Incripcion exitosa"})
 }

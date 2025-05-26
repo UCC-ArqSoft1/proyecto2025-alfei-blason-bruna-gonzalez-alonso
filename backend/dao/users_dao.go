@@ -9,5 +9,5 @@ type Usuario struct {
 	DNI             int
 	Mail            string `gorm:"unique"`
 	IsAdmin         bool
-	foto            string
+	Foto            string
 }

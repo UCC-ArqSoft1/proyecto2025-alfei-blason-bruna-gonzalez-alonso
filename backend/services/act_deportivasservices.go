@@ -58,3 +58,14 @@ func GetTodasAct() ([]dao.ActConHorarios, error) {
 
 	return actividadesConHorarios, nil
 }
+func CrearActividad(actividad *dao.ActDeportiva) error {
+	err := clients.CrearAct(actividad)
+	if err != nil {
+		return fmt.Errorf("error generando Actividad: %w", err)
+	}
+	return nil
+}
+
+func EliminarActividad() {
+
+}
