@@ -13,6 +13,10 @@ function Activities() {
         navigate(`/activity/${id}`);
     };
 
+    const volverAlLogin = () => {
+        navigate("/login");
+    };
+
     useEffect(() => {
         fetch("http://localhost:8080/act_deportiva")//llama a la api
             .then(res => res.json())// convierte la respuesta en json
@@ -43,6 +47,8 @@ function Activities() {
 
 
     return (
+        <>
+        <button onClick={volverAlLogin} className="botonVolver"> ← Volver </button>
         <div className="container">
             <h1 className="title">Bienvenido a la página de Actividades</h1>
 
@@ -75,6 +81,7 @@ function Activities() {
                 ))
             )}
         </div>
+        </>
     );
 }
 

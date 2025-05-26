@@ -1,0 +1,88 @@
+.detalles {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fdfdfd;
+    border-radius: 12px;
+    margin-top: 100px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+.detalles h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.activity-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.detalles p {
+    font-size: 1rem;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.detalles strong {
+    color: #2c3e50;
+}
+
+.detalles ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.detalles li {
+    background-color: #ecf0f1;
+    padding: 10px 15px;
+    margin: 8px 0;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.botonInscripcion {
+    color: aliceblue;
+    border: none;
+    border-radius: 20px;
+    background-color: #bc7848;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+    display: block;
+    margin-top: -20px;
+    margin-left: auto;
+    width: 120px;
+}
+
+
+.botonVolver {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color:  #bc7848;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.botonVolver:hover {
+    background-color:  #bc7900;
+}
