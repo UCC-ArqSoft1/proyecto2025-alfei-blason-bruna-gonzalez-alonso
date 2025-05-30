@@ -68,7 +68,7 @@ func CrearAct(ctx *gin.Context) {
 	}
 	actividad := &dao.ActDeportiva{
 		Nombre:         Act.Nombre,
-		NombreProfesor: Act.Nombre,
+		NombreProfesor: Act.NombreProfesor,
 		Cupos:          Act.Cupos,
 		IdCategoria:    Act.IdCategoria,
 		Horarios: []dao.Horario{{
@@ -84,5 +84,48 @@ func CrearAct(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "Incripcion exitosa"})
+	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "La actividad se creo correctamente"})
+}
+func EliminarAct(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+
+	IDactividad, err := strconv.Atoi(idParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
+		return
+	}
+	error := services.EliminarActividad(IDactividad)
+	if error != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": error.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "La actividad se elimino correctamente"})
+}
+
+func EditarAct(ctx *gin.Context) {
+	var act Crear
+	if err := ctx.ShouldBindJSON(&act); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"Error: ": "JSON invalido"})
+		return
+	}
+
+	actividad := &dao.ActDeportiva{
+		Nombre:         act.Nombre,
+		NombreProfesor: act.NombreProfesor,
+		Cupos:          act.Cupos,
+		IdCategoria:    act.IdCategoria,
+		Horarios: []dao.Horario{{
+			Dia:           act.Dia,
+			HorarioInicio: act.HorarioInicio,
+			HorarioFin:    act.HorarioFin,
+		}},
+		Foto:        act.Foto,
+		Descripcion: act.Descripcion,
+	}
+	err := services.CrearActividad(actividad)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "La actividad se edito correctamente"})
 }
