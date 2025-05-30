@@ -66,6 +66,18 @@ func CrearActividad(actividad *dao.ActDeportiva) error {
 	return nil
 }
 
-func EliminarActividad() {
+func EliminarActividad(Idact int) error {
+	err := clients.EliminarAct(Idact)
+	if err != nil {
+		return fmt.Errorf("error eliminando la actividad: %w", err)
+	}
+	return nil
+}
 
+func EditarAct(act dao.ActDeportiva) error {
+	err := clients.EditarAct(act)
+	if err != nil {
+		return fmt.Errorf("error generando Actividad: %w", err)
+	}
+	return nil
 }

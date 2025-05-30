@@ -32,88 +32,88 @@ func init() {
 		panic(fmt.Sprintf("error connecting to DB: %v", err))
 	}
 
-	/*	DB.AutoMigrate(&dao.Usuario{})
-		DB.AutoMigrate(&dao.Horario{})
-		DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
-		DB.AutoMigrate(&dao.Inscripcion{})
-		DB.AutoMigrate(&dao.Categoria{})
+	/*DB.AutoMigrate(&dao.Usuario{})
+	DB.AutoMigrate(&dao.Horario{})
+	DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
+	DB.AutoMigrate(&dao.Inscripcion{})
+	DB.AutoMigrate(&dao.Categoria{})
 
-		DB.Create(&dao.Usuario{
-			NombreUsuario:   "mateo123",
-			ContraseniaHash: Utils.HashSHA256("mateo"),
-			Nombre:          "mateo",
-			Apellido:        "Alfei",
-			DNI:             43928426,
-			Mail:            "mateo123@gmail.com",
-			IsAdmin:         false,
-		})
+	DB.Create(&dao.Usuario{
+		NombreUsuario:   "mateo123",
+		ContraseniaHash: Utils.HashSHA256("mateo"),
+		Nombre:          "mateo",
+		Apellido:        "Alfei",
+		DNI:             43928426,
+		Mail:            "mateo123@gmail.com",
+		IsAdmin:         false,
+	})
 
-		DB.Create(&dao.ActDeportiva{
-			Nombre:         "Spinning",
-			NombreProfesor: "Emiliano",
-			Cupos:          10,
-			IdCategoria:    1,
-			Horarios: []dao.Horario{
-				{
-						Dia:           "Martes",
-						HorarioInicio: "18:00",
-						HorarioFin:    "20:00",
-				},
-				{
-					Dia:           "Viernes",
-					HorarioInicio: "14:00",
-					HorarioFin:    "15:00",
-				},
+	DB.Create(&dao.ActDeportiva{
+		Nombre:         "Spinning",
+		NombreProfesor: "Emiliano",
+		Cupos:          10,
+		IdCategoria:    1,
+		Horarios: []dao.Horario{
+			{
+				Dia:           "Martes",
+				HorarioInicio: "18:00",
+				HorarioFin:    "20:00",
 			},
-		})
-
-		DB.Create(&dao.ActDeportiva{
-			Nombre:         "Yoga",
-			NombreProfesor: "Juan",
-			Cupos:          10,
-			IdCategoria:    3,
-			Horarios: []dao.Horario{
-				{
-					Dia:           "Lunes",
-					HorarioInicio: "10:00",
-					HorarioFin:    "12:00",
-				},
-				{
-					Dia:           "Martes",
-					HorarioInicio: "10:00",
-					HorarioFin:    "12:00",
-				},
+			{
+				Dia:           "Viernes",
+				HorarioInicio: "14:00",
+				HorarioFin:    "15:00",
 			},
-		})
+		},
+	})
 
-		DB.Create(&dao.Usuario{
-			Nombre:          "Martina",
-			Apellido:        "Valdo",
-			NombreUsuario:   "Martina123456",
-			DNI:             46032879,
-			Mail:            "mmmm@gmail.com",
-			ContraseniaHash: Utils.HashSHA256("12345"),
-			IsAdmin:         true,
-		})
+	DB.Create(&dao.ActDeportiva{
+		Nombre:         "Yoga",
+		NombreProfesor: "Juan",
+		Cupos:          10,
+		IdCategoria:    3,
+		Horarios: []dao.Horario{
+			{
+				Dia:           "Lunes",
+				HorarioInicio: "10:00",
+				HorarioFin:    "12:00",
+			},
+			{
+				Dia:           "Martes",
+				HorarioInicio: "10:00",
+				HorarioFin:    "12:00",
+			},
+		},
+	})
 
-		DB.Create(&dao.Categoria{
-			Nombre: "Musculacion",
-		})
+	DB.Create(&dao.Usuario{
+		Nombre:          "Martina",
+		Apellido:        "Valdo",
+		NombreUsuario:   "Martina123456",
+		DNI:             46032879,
+		Mail:            "mmmm@gmail.com",
+		ContraseniaHash: Utils.HashSHA256("12345"),
+		IsAdmin:         true,
+	})
 
-		DB.Create(&dao.Categoria{
-			Nombre: "Funcional",
-		})
+	DB.Create(&dao.Categoria{
+		Nombre: "Musculacion",
+	})
 
-		DB.Create(&dao.Inscripcion{
-			IdUsuario:   1,
-			IdActividad: 1,
-			IdHorario:   1,
-		})
-		DB.Create(&dao.Inscripcion{
-			IdUsuario:   1,
-			IdActividad: 2,
-			IdHorario:   2,
-		})*/
+	DB.Create(&dao.Categoria{
+		Nombre: "Funcional",
+	})
+
+	DB.Create(&dao.Inscripcion{
+		IdUsuario:   1,
+		IdActividad: 1,
+		IdHorario:   1,
+	})
+	DB.Create(&dao.Inscripcion{
+		IdUsuario:   1,
+		IdActividad: 2,
+		IdHorario:   2,
+	})*/
 }
 
 func GetUserByUsername(username string) (dao.Usuario, error) {
@@ -207,6 +207,14 @@ func EliminarAct(IDact int) error {
 	txn := DB.Delete(&dao.ActDeportiva{}, IDact)
 	if txn.Error != nil {
 		return fmt.Errorf("error eliminando actividad con ID %d: %w", IDact, txn.Error)
+	}
+	return nil
+}
+
+func EditarAct(act dao.ActDeportiva) error {
+	tnx := DB.Save(act)
+	if tnx.Error != nil {
+		return fmt.Errorf("error editando actividad %w", act, tnx.Error)
 	}
 	return nil
 }
