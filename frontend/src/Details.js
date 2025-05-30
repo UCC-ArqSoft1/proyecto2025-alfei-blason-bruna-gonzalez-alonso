@@ -6,10 +6,36 @@ function Details() {
     const { id } = useParams();
     const [detalle, setDetalle] = useState(null);
     const navigate = useNavigate();
+    const [inscripcionExitosa, setInscripcionExitosa] = useState(false);
 
     const volverAlLogin = () => {
         navigate("/activities");
     };
+
+    const handleClick = async (e) => {
+        console.log("Captured click")
+        e.preventDefault();
+
+        try {
+            const response = await fetch("http://localhost:8080/users/1/inscripciones", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({id_horario: 1, id_actividad: parseInt(id)})
+            });
+
+            if (response.ok) {
+                setInscripcionExitosa(true);
+            } else {
+                console.error("Inscripción fallida");
+            }
+
+        }catch (error){
+            console.error("Inscripcion fallida", error);
+
+        }
+    }
 
     useEffect(() => {
         console.log("cargado actividades");
@@ -24,6 +50,13 @@ function Details() {
     return (
         <>
             <button onClick={volverAlLogin} className="botonVolver"> ← Volver </button>
+
+            {inscripcionExitosa && (
+                <div className="inscripcion-exitosa">
+                    ¡Inscripción exitosa!
+                </div>
+            )}
+
             <div className="detalles">
                 <h2>Detalle Actividad</h2>
                 <img src={detalle.Imagen} alt={detalle.Nombre} className="activity-image" />
@@ -44,7 +77,7 @@ function Details() {
                         return (
                             <li key={i}>
                                 {h.Dia} de {h.HorarioInicio} a {h.HorarioFin} ({duracion})
-                                <input type="submit" value="Inscribirme" className="botonInscripcion"/>
+                                <button type="submit" className="botonInscripcion" onClick={handleClick}> Inscribirme </button>
                             </li>
                         );
                     })}

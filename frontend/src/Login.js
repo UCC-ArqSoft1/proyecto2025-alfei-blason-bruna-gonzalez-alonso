@@ -9,8 +9,6 @@ function Login() {
     const [contrasenia, setContrasenia] = useState("");
     const navigate = useNavigate();
 
-
-
     const changeUsername = async (e) => {
         console.log(e.target.value);
         setUsuario(e.target.value);
@@ -20,7 +18,6 @@ function Login() {
         setContrasenia(e.target.value);
     }
     const send = async (e) => {
-      //  const send = async (e) => {
             e.preventDefault(); // importante para evitar recargar la página
             console.log("Llamando al backend");
 
@@ -38,15 +35,16 @@ function Login() {
                 const data = await response.json();
                 console.log(data);
 
-                // ✅ Redirigir si fue exitoso
+                document.cookie = "usuario = ${usuario}; path=/;SameSite=Strict;"
+
                 navigate("/Activities");
+
             } catch (error) {
                 console.error("Login fallido", error);
                 alert("Credenciales incorrectas");
             }
-       // };
-
     }
+
     return (
         <div className="Login">
         <header>
