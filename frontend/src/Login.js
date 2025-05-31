@@ -35,7 +35,7 @@ function Login() {
                 const data = await response.json();
                 console.log(data);
 
-                document.cookie = "usuario = ${usuario}; path=/;SameSite=Strict;"
+                document.cookie = `user_id = ${data.usuario}; token = ${data.token}; path=/;SameSite=Strict;`
 
                 navigate("/Activities");
 

@@ -17,7 +17,18 @@ function Details() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8080/users/1/inscripciones", {
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
+
+            const userID = getCookie('user_id');
+            const token = getCookie('token');
+            console.log('Usuario:', userID);
+            console.log('Token:', token);
+
+            const response = await fetch(`http://localhost:8080/users/${userID}/inscripciones`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -33,7 +44,6 @@ function Details() {
 
         }catch (error){
             console.error("Inscripcion fallida", error);
-
         }
     }
 
