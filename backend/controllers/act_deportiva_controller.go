@@ -44,19 +44,7 @@ func ObtenerTodasAct(ctx *gin.Context) {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-
-	for i, act := range Actividades {
-		ctx.JSON(http.StatusOK, gin.H{
-			"NombreActividad": act.Actividad.Nombre,
-			"NombreProfesor":  act.Actividad.NombreProfesor,
-			"HorarioInicio":   act.Horarios[i].HorarioInicio,
-			"HorarioFin":      act.Horarios[i].HorarioFin,
-			"Dia":             act.Horarios[i].Dia,
-			"Cupos":           act.Horarios[i].Cupos,
-			"Foto":            act.Actividad.Foto,
-			"Descripcion":     act.Actividad.Descripcion,
-		})
-	}
+	ctx.JSON(http.StatusOK, Actividades)
 }
 
 type Crear struct {
