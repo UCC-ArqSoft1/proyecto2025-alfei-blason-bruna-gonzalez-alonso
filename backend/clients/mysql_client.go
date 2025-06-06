@@ -53,6 +53,8 @@ func init() {
 		Nombre:         "Spinning",
 		NombreProfesor: "Emiliano",
 		IdCategoria:    1,
+		Descripcion: "Actividad cardiovascular que se realiza en una bicicleta fija al ritmo de la música, guiada por un instructor." +
+			" Mejora la resistencia, quema calorías y fortalece piernas y glúteos.",
 		Horarios: []dao.Horario{
 			{
 				Dia:           "Martes",
@@ -73,6 +75,9 @@ func init() {
 		Nombre:         "Yoga",
 		NombreProfesor: "Juan",
 		IdCategoria:    3,
+		Descripcion: "Disciplina física y mental originaria de la India que combina posturas (asanas), ejercicios de respiración (pranayama) " +
+			"y meditación para mejorar la flexibilidad, la fuerza, el equilibrio y el bienestar general.",
+
 		Horarios: []dao.Horario{
 			{
 				Dia:           "Lunes",

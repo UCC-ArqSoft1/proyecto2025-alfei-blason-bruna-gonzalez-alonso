@@ -54,6 +54,7 @@ func GetTodasAct() ([]dao.ActConHorarios, error) {
 		}
 
 		actividadesConHorarios = append(actividadesConHorarios, actConHorarios)
+
 	}
 
 	return actividadesConHorarios, nil
