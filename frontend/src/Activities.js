@@ -14,8 +14,12 @@ function Activities() {
     };
 
     const volverAlLogin = () => {
-        navigate("/login");
+        const confirmacion = window.confirm("¿Estás seguro de volver atrás? Se cerrará tu sesión.");
+        if (confirmacion) {
+            navigate("/login");
+        }
     };
+
 
     useEffect(() => {
         fetch("http://localhost:8080/act_deportiva")//llama a la api
@@ -67,7 +71,6 @@ function Activities() {
                     <div key={index} className="activity-card" onClick={() => goToDetail(item.actividad.IDActividad)}>
                         <p><strong>Actividad:</strong> {item.actividad.Nombre}</p>
                         <p><strong>Profesor:</strong> {item.actividad.NombreProfesor}</p>
-                        <p><strong>Cupos:</strong> {item.actividad.Cupos}</p>
 
                         <p><strong>Horarios:</strong></p>
                         <ul>
@@ -77,6 +80,7 @@ function Activities() {
                                 </li>
                             ))}
                         </ul>
+
                     </div>
                 ))
             )}

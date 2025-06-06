@@ -12,9 +12,10 @@ function Details() {
         navigate("/activities");
     };
 
-    const handleClick = async (e) => {
-        console.log("Captured click")
-        e.preventDefault();
+    const handleClick = async (id_horario) => {
+        console.log("Captured // click")
+        console.log(`id_horario ${id_horario}`)
+        //e.preventDefault();
 
         try {
             function getCookie(name) {
@@ -33,7 +34,7 @@ function Details() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({id_horario: 1, id_actividad: parseInt(id)})
+                body: JSON.stringify({id_horario: id_horario, id_actividad: parseInt(id)})
             });
 
             if (response.ok) {
@@ -73,7 +74,6 @@ function Details() {
                 <p><strong>Actividad:</strong>{detalle.NombreActividad}</p>
                 <p><strong>Descripción:</strong> {detalle.Descripcion}</p>
                 <p><strong>Profesor:</strong> {detalle.NombreProfesor}</p>
-                <p><strong>Cupo máximo:</strong> {detalle.Cupos}</p>
                 <p><strong>Horarios:</strong></p>
                 <ul>
                     {Array.isArray(detalle.Horarios) && detalle.Horarios.map((h, i) => {
@@ -86,8 +86,8 @@ function Details() {
 
                         return (
                             <li key={i}>
-                                {h.Dia} de {h.HorarioInicio} a {h.HorarioFin} ({duracion})
-                                <button type="submit" className="botonInscripcion" onClick={handleClick}> Inscribirme </button>
+                                {h.Dia} de {h.HorarioInicio} a {h.HorarioFin} ({duracion}) Cupos: {h.Cupos}
+                                <button type="submit" className="botonInscripcion" onClick={() => handleClick(h.IdHorario)}> Inscribirme </button>
                             </li>
                         );
                     })}
