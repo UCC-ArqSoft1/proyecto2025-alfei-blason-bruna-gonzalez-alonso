@@ -21,16 +21,16 @@ func GetTodasAct() ([]dao.ActDeportiva, error) {
 	}
 	return ActDAO, nil
 }*/
-func GetAct(IDact int) (int, string, error, string, int, []dao.Horario) {
+func GetAct(IDact int) (int, string, error, string, []dao.Horario) {
 	ActDAO, err := clients.GetActbyId(IDact)
 	if err != nil {
-		return 0, "", fmt.Errorf("error getting Activity: %w", err), " ", 0, nil
+		return 0, "", fmt.Errorf("error getting Activity: %w", err), " ", nil
 	}
 	horarios, err := clients.GetHorariosByActividad(IDact)
 	if err != nil {
-		return 0, "", fmt.Errorf("error getting horarios: %w", err), " ", 0, nil
+		return 0, "", fmt.Errorf("error getting horarios: %w", err), " ", nil
 	}
-	return ActDAO.IDActividad, ActDAO.Nombre, nil, ActDAO.NombreProfesor, ActDAO.Cupos, horarios
+	return ActDAO.IDActividad, ActDAO.Nombre, nil, ActDAO.NombreProfesor, horarios
 
 }
 func GetTodasAct() ([]dao.ActConHorarios, error) {

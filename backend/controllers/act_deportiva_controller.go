@@ -23,7 +23,7 @@ func ObtenerAct(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
 		return
 	}
-	IDactivity, Nombreact, err, Nombreprofesor, cupos, horarios := services.GetAct(IDactividad)
+	IDactivity, Nombreact, err, Nombreprofesor, horarios := services.GetAct(IDactividad)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -34,7 +34,6 @@ func ObtenerAct(ctx *gin.Context) {
 		"ActId":           IDactivity,
 		"NombreActividad": Nombreact,
 		"NombreProfesor":  Nombreprofesor,
-		"Cupos":           cupos,
 		"Horarios":        horarios,
 	})
 }
@@ -69,12 +68,12 @@ func CrearAct(ctx *gin.Context) {
 	actividad := &dao.ActDeportiva{
 		Nombre:         Act.Nombre,
 		NombreProfesor: Act.NombreProfesor,
-		Cupos:          Act.Cupos,
 		IdCategoria:    Act.IdCategoria,
 		Horarios: []dao.Horario{{
 			Dia:           Act.Dia,
 			HorarioInicio: Act.HorarioInicio,
 			HorarioFin:    Act.HorarioFin,
+			Cupos:         Act.Cupos,
 		}},
 		Foto:        Act.Foto,
 		Descripcion: Act.Descripcion,
@@ -112,12 +111,12 @@ func EditarAct(ctx *gin.Context) {
 	actividad := &dao.ActDeportiva{
 		Nombre:         act.Nombre,
 		NombreProfesor: act.NombreProfesor,
-		Cupos:          act.Cupos,
 		IdCategoria:    act.IdCategoria,
 		Horarios: []dao.Horario{{
 			Dia:           act.Dia,
 			HorarioInicio: act.HorarioInicio,
 			HorarioFin:    act.HorarioFin,
+			Cupos:         act.Cupos,
 		}},
 		Foto:        act.Foto,
 		Descripcion: act.Descripcion,

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/Utils"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
 )
 
@@ -32,7 +33,7 @@ func init() {
 		panic(fmt.Sprintf("error connecting to DB: %v", err))
 	}
 
-	/*DB.AutoMigrate(&dao.Usuario{})
+	DB.AutoMigrate(&dao.Usuario{})
 	DB.AutoMigrate(&dao.Horario{})
 	DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
 	DB.AutoMigrate(&dao.Inscripcion{})
@@ -51,18 +52,19 @@ func init() {
 	DB.Create(&dao.ActDeportiva{
 		Nombre:         "Spinning",
 		NombreProfesor: "Emiliano",
-		Cupos:          10,
 		IdCategoria:    1,
 		Horarios: []dao.Horario{
 			{
 				Dia:           "Martes",
 				HorarioInicio: "18:00",
 				HorarioFin:    "20:00",
+				Cupos:         10,
 			},
 			{
 				Dia:           "Viernes",
 				HorarioInicio: "14:00",
 				HorarioFin:    "15:00",
+				Cupos:         10,
 			},
 		},
 	})
@@ -70,18 +72,19 @@ func init() {
 	DB.Create(&dao.ActDeportiva{
 		Nombre:         "Yoga",
 		NombreProfesor: "Juan",
-		Cupos:          10,
 		IdCategoria:    3,
 		Horarios: []dao.Horario{
 			{
 				Dia:           "Lunes",
 				HorarioInicio: "10:00",
 				HorarioFin:    "12:00",
+				Cupos:         10,
 			},
 			{
 				Dia:           "Martes",
 				HorarioInicio: "10:00",
 				HorarioFin:    "12:00",
+				Cupos:         10,
 			},
 		},
 	})
@@ -113,7 +116,7 @@ func init() {
 		IdUsuario:   1,
 		IdActividad: 2,
 		IdHorario:   2,
-	})*/
+	})
 }
 
 func GetUserByUsername(username string) (dao.Usuario, error) {
@@ -172,14 +175,18 @@ func GetActInscripcion(IDusuario int) ([]dao.ActDeportiva, []dao.Horario, error)
 }
 func GenerarInscripcion(IDuser int, IDact int, IDhorario int) error {
 	var actividad dao.ActDeportiva
+	var horario dao.Horario
 	if err := DB.First(&actividad, IDact).Error; err != nil {
 		return fmt.Errorf("Error: No se encontró la actividad: %w", err)
 	}
-	if actividad.Cupos <= 0 {
+	if err := DB.First(&horario, IDact).Error; err != nil {
+		return fmt.Errorf("Error: No se encontró el horario: %w", err)
+	}
+	if horario.Cupos <= 0 {
 		return fmt.Errorf("Error: No hay cupos disponibles para esta actividad")
 	}
 	err := DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Model(&actividad).Where("cupos > 0").Update("cupos", gorm.Expr("cupos - ?", 1)).Error; err != nil {
+		if err := tx.Model(&horario).Where("cupos > 0").Update("cupos", gorm.Expr("cupos - ?", 1)).Error; err != nil {
 			return fmt.Errorf("Error al actualizar cupos: %w", err)
 		}
 		txn := DB.Create(&dao.Inscripcion{

@@ -6,6 +6,7 @@ type Horario struct {
 	Dia           string
 	HorarioInicio string
 	HorarioFin    string
+	Cupos         int
 }
 
 type ActConHorarios struct {

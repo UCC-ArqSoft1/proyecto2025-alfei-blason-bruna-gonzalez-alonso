@@ -61,7 +61,7 @@ func GetActInscripcion(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"NombreActividad": act.Nombre,
 			"NombreProfesor":  act.NombreProfesor,
-			"Cupos":           act.Cupos,
+			"Cupos":           Horario[i].Cupos,
 			"Dia":             Horario[i].Dia,
 			"Hora Inicio":     Horario[i].HorarioInicio,
 			"Hora Fin":        Horario[i].HorarioFin,
