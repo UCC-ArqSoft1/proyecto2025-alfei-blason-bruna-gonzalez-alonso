@@ -102,6 +102,8 @@ func EliminarAct(ctx *gin.Context) {
 }
 
 func EditarAct(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	IDactividad, err := strconv.Atoi(idParam)
 	var act Crear
 	if err := ctx.ShouldBindJSON(&act); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"Error: ": "JSON invalido"})
@@ -109,6 +111,7 @@ func EditarAct(ctx *gin.Context) {
 	}
 
 	actividad := &dao.ActDeportiva{
+		IDActividad:    IDactividad,
 		Nombre:         act.Nombre,
 		NombreProfesor: act.NombreProfesor,
 		IdCategoria:    act.IdCategoria,
@@ -121,7 +124,7 @@ func EditarAct(ctx *gin.Context) {
 		Foto:        act.Foto,
 		Descripcion: act.Descripcion,
 	}
-	err := services.CrearActividad(actividad)
+	err = services.EditarAct(actividad)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
 		return
