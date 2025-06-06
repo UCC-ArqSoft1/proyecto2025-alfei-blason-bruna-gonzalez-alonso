@@ -27,7 +27,7 @@ function Activities() {
             .then(data => {
                 setActividades(data);
                 setFilteredActividades(data);
-            })// guarda los datos en los estados
+            })
             .catch(err => console.error(err));// si hay error muestra
     }, []);
 

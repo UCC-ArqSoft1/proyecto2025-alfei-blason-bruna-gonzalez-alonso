@@ -21,7 +21,7 @@ func GetTodasAct() ([]dao.ActDeportiva, error) {
 	}
 	return ActDAO, nil
 }*/
-func GetAct(IDact int) (int, string, error, string, []dao.Horario) {
+func GetAct(IDact int) (int, string, error, string, []dao.Horario /*[]domain.Horario*/) {
 	ActDAO, err := clients.GetActbyId(IDact)
 	if err != nil {
 		return 0, "", fmt.Errorf("error getting Activity: %w", err), " ", nil
@@ -30,7 +30,19 @@ func GetAct(IDact int) (int, string, error, string, []dao.Horario) {
 	if err != nil {
 		return 0, "", fmt.Errorf("error getting horarios: %w", err), " ", nil
 	}
-	return ActDAO.IDActividad, ActDAO.Nombre, nil, ActDAO.NombreProfesor, horarios
+	/*hs := make([]domain.Horario, 0)
+	for _, horarioDAO := range horarios {
+		hs = append(hs, domain.Horario{
+			IdHorario: horarioDAO.IdHorario,
+			IdActividad: horarioDAO.IdActividad,
+			Dia: horarioDAO.Dia,
+			HorarioInicio: horarioDAO.HorarioInicio,
+			HorarioFin: horarioDAO.HorarioFin,
+			Cupos: horarioDAO.Cupos
+		})
+	}*/
+
+	return ActDAO.IDActividad, ActDAO.Nombre, nil, ActDAO.NombreProfesor, horarios //hs
 
 }
 func GetTodasAct() ([]dao.ActConHorarios, error) {
@@ -75,7 +87,7 @@ func EliminarActividad(Idact int) error {
 	return nil
 }
 
-func EditarAct(act dao.ActDeportiva) error {
+func EditarAct(act *dao.ActDeportiva) error {
 	err := clients.EditarAct(act)
 	if err != nil {
 		return fmt.Errorf("error generando Actividad: %w", err)
