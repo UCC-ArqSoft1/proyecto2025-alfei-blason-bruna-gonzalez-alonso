@@ -15,7 +15,6 @@ function Details() {
     const handleClick = async (id_horario) => {
         console.log("Captured // click")
         console.log(`id_horario ${id_horario}`)
-        //e.preventDefault();
 
         try {
             function getCookie(name) {
