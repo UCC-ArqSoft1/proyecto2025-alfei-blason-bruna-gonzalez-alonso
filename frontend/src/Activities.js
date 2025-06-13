@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Activities.css";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function useLogout() {
     const navigate = useNavigate();
@@ -36,71 +36,58 @@ function Activities() {
         if (confirmacion) logout();
     };
 
-
     useEffect(() => {
-        fetch("http://localhost:8080/act_deportiva")//llama a la api
-            .then(res => res.json())// convierte la respuesta en json
-            .then(data => {
-                setActividades(data);
-                setFilteredActividades(data);
-            })
-            .catch(err => console.error(err));// si hay error muestra
-    }, []);
+        const delayDebounce = setTimeout(() => {
+            const filtro = searchTerm ? `?filtro=${searchTerm}` : "";
+            fetch(`http://localhost:8080/act_deportiva${filtro}`)
+                .then(res => res.json())
+                .then(data => {
+                    const actividadesSeguras = Array.isArray(data) ? data : [];
+                    setActividades(actividadesSeguras);
+                    setFilteredActividades(actividadesSeguras);
+                })
+                .catch(err => console.error(err));
+        }, 400);
 
-    useEffect(() => { //filtra los datos cuando cambia el termino de busqueda
-        const term = searchTerm.toLowerCase();
-        const filtered = actividades.filter(item => {
-            const act = item.actividad;
-            const horariosStr = item.horarios
-                .map(h => `${h.Dia} ${h.HorarioInicio}-${h.HorarioFin}`)
-                .join(" ")
-                .toLowerCase();
-
-            return (
-                act.Nombre.toLowerCase().includes(term) ||
-                act.NombreProfesor.toLowerCase().includes(term) ||
-                horariosStr.includes(term)
-            );
-        });
-        setFilteredActividades(filtered);
-    }, [searchTerm, actividades]);
+        return () => clearTimeout(delayDebounce);
+    }, [searchTerm]);
 
 
     return (
         <>
-        <button onClick={volverAlLogin} className="botonVolver"> ← Volver </button>
-        <div className="container">
-            <h1 className="title">Bienvenido a la página de Actividades</h1>
+            <button onClick={volverAlLogin} className="botonVolver"> ← Volver </button>
+            <div className="container">
+                <h1 className="title">Bienvenido a la página de Actividades</h1>
 
-            <input
-                type="text"
-                placeholder="Buscar por palabra clave, horario o profesor"
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                className="search-input"
-            />
+                <input
+                    type="text"
+                    placeholder="Buscar por palabra clave, horario o profesor"
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)} // Actualiza el estado del término de búsqueda
+                    className="search-input"
+                />
 
-            {filteredActividades.length === 0 ? (
-                <p>No se encontraron actividades.</p>
-            ) : (
-                filteredActividades.map((item, index) => (
-                    <div key={index} className="activity-card" onClick={() => goToDetail(item.actividad.IDActividad)}>
-                        <p><strong>Actividad:</strong> {item.actividad.Nombre}</p>
-                        <p><strong>Profesor:</strong> {item.actividad.NombreProfesor}</p>
+                {Array.isArray(filteredActividades) && filteredActividades.length === 0 ? (
+                    <p>No se encontraron actividades.</p>
+                ) : (
+                    filteredActividades.map((item, index) => (
+                        <div key={index} className="activity-card" onClick={() => goToDetail(item.actividad.IDActividad)}>
+                            <p><strong>Actividad:</strong> {item.actividad.Nombre}</p>
+                            <p><strong>Profesor:</strong> {item.actividad.NombreProfesor}</p>
 
-                        <p><strong>Horarios:</strong></p>
-                        <ul>
-                            {item.horarios.map((h, i) => (
-                                <li key={i}>
-                                    {h.Dia} de {h.HorarioInicio} a {h.HorarioFin}
-                                </li>
-                            ))}
-                        </ul>
+                            <p><strong>Horarios:</strong></p>
+                            <ul>
+                                {item.horarios.map((h, i) => (
+                                    <li key={i}>
+                                        {h.Dia} de {h.HorarioInicio} a {h.HorarioFin}
+                                    </li>
+                                ))}
+                            </ul>
 
-                    </div>
-                ))
-            )}
-        </div>
+                        </div>
+                    ))
+                )}
+            </div>
         </>
     );
 }
