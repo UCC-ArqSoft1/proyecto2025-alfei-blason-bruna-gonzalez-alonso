@@ -76,7 +76,7 @@ func init() {
 		Nombre:         "Yoga",
 		NombreProfesor: "Juan",
 		IdCategoria:    2,
-		Descripcion: "Disciplina física y mental originaria de la India que combina posturas (asanas), ejercicios de respiración (pranayama) " +
+		Descripcion: "Disciplina física y mental originaria de la India que combina posturas, ejercicios de respiración" +
 			"y meditación para mejorar la flexibilidad, la fuerza, el equilibrio y el bienestar general.",
 		Foto: "https://phantom-elmundo.unidadeditorial.es/95aebb12721c45a14b949cca2d81c06d/crop/0x0/2475x1666/resize/1200/f/jpg/assets/multimedia/imagenes/2021/08/27/16300683348682.jpg ",
 		Horarios: []dao.Horario{
