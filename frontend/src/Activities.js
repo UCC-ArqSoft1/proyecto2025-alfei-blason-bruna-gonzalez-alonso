@@ -2,12 +2,30 @@ import React, { useEffect, useState } from "react";
 import "./Activities.css";
 import {useNavigate} from "react-router-dom";
 
+function useLogout() {
+    const navigate = useNavigate();
+
+    const borrarCookie = (nombre) => {
+        document.cookie = `${nombre}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+        document.cookie = `${nombre}=; path=/; Max-Age=0;`;
+    };
+
+    const logout = () => {
+        borrarCookie("token");
+        borrarCookie("user_id");
+        console.log("Sesión cerrada. Cookies eliminadas.");
+        navigate("/login");
+    };
+
+    return logout;
+}
 
 function Activities() {
     const [actividades, setActividades] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredActividades, setFilteredActividades] = useState([]);
     const navigate = useNavigate();
+    const logout = useLogout();
 
     const goToDetail = (id) => {
         navigate(`/activity/${id}`);
@@ -15,9 +33,7 @@ function Activities() {
 
     const volverAlLogin = () => {
         const confirmacion = window.confirm("¿Estás seguro de volver atrás? Se cerrará tu sesión.");
-        if (confirmacion) {
-            navigate("/login");
-        }
+        if (confirmacion) logout();
     };
 
 

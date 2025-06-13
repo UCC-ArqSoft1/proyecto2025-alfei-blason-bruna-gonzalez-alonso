@@ -15,7 +15,6 @@ function Details() {
     const handleClick = async (id_horario) => {
         console.log("Captured // click")
         console.log(`id_horario ${id_horario}`)
-        //e.preventDefault();
 
         try {
             function getCookie(name) {
@@ -39,6 +38,12 @@ function Details() {
 
             if (response.ok) {
                 setInscripcionExitosa(true);
+                // Restar 1 al cupo en el estado
+                const nuevoDetalle = { ...detalle }; // copia del objeto
+                nuevoDetalle.Horarios = detalle.Horarios.map((h) =>
+                    h.IdHorario === id_horario ? { ...h, Cupos: h.Cupos - 1 } : h
+                );
+                setDetalle(nuevoDetalle);
             } else {
                 console.error("Inscripción fallida");
             }
@@ -83,11 +88,14 @@ function Details() {
                         const minutosFin = hFin * 60 + mFin;
                         const duracionMin = minutosFin - minutosInicio;
                         const duracion = `${Math.floor(duracionMin / 60)}h ${duracionMin % 60}min`; //convierte la duracion a horas y minutos
+                        const cuposDisponibles = h.Cupos > 0;
 
                         return (
                             <li key={i}>
                                 {h.Dia} de {h.HorarioInicio} a {h.HorarioFin} ({duracion}) Cupos: {h.Cupos}
-                                <button type="submit" className="botonInscripcion" onClick={() => handleClick(h.IdHorario)}> Inscribirme </button>
+                                <button type="submit"
+                                        className="botonInscripcion"
+                                        onClick={() => handleClick(h.IdHorario)}> {cuposDisponibles ? "Inscribirme" : "Sin cupos"} </button>
                             </li>
                         );
                     })}
