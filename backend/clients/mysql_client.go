@@ -55,6 +55,7 @@ func init() {
 		IdCategoria:    1,
 		Descripcion: "Actividad cardiovascular que se realiza en una bicicleta fija al ritmo de la música, guiada por un instructor." +
 			" Mejora la resistencia, quema calorías y fortalece piernas y glúteos.",
+		Foto: "https://as01.epimg.net/deporteyvida/imagenes/2019/09/03/portada/1567536855_286772_1567537023_noticia_normal.jpg ",
 		Horarios: []dao.Horario{
 			{
 				Dia:           "Martes",
@@ -77,7 +78,7 @@ func init() {
 		IdCategoria:    2,
 		Descripcion: "Disciplina física y mental originaria de la India que combina posturas (asanas), ejercicios de respiración (pranayama) " +
 			"y meditación para mejorar la flexibilidad, la fuerza, el equilibrio y el bienestar general.",
-
+		Foto: "https://phantom-elmundo.unidadeditorial.es/95aebb12721c45a14b949cca2d81c06d/crop/0x0/2475x1666/resize/1200/f/jpg/assets/multimedia/imagenes/2021/08/27/16300683348682.jpg ",
 		Horarios: []dao.Horario{
 			{
 				Dia:           "Lunes",
@@ -110,6 +111,7 @@ func init() {
 		IdCategoria:    3,
 		Descripcion: "Es un tipo de entrenamiento físico que busca desarrollar y fortalecer los músculos mediante ejercicios con pesas y resistencia." +
 			" Mejora la fuerza, la salud y la forma del cuerpo.",
+		Foto: "https://www.rocfit.com/wp-content/uploads/Equipos-de-musculacion-para-entrenamiento-de-tren-inferior.jpg  ",
 		Horarios: []dao.Horario{
 			{
 				Dia:           "Jueves",
@@ -138,6 +140,7 @@ func init() {
 		IdCategoria:    4,
 		Descripcion: "Es una forma de entrenamiento que mejora la fuerza, el equilibrio y la movilidad con ejercicios que imitan movimientos de la vida diaria." +
 			" Ideal para ganar rendimiento y prevenir lesiones.",
+		Foto: " https://img.freepik.com/foto-gratis/gente-trabajando-interior-junto-pesas_23-2149175410.jpg?ga=GA1.1.414139249.1716316757&semt=ais_hybrid&w=740",
 		Horarios: []dao.Horario{
 			{
 				Dia:           "Martes",
