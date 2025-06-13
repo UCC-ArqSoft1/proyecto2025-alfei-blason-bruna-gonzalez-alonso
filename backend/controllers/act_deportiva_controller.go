@@ -34,6 +34,8 @@ func ObtenerAct(ctx *gin.Context) {
 		"ActId":           actividad.IDActividad,
 		"NombreActividad": actividad.Nombre,
 		"NombreProfesor":  actividad.NombreProfesor,
+		"Foto":            actividad.Foto,
+		"Descripcion":     actividad.Descripcion,
 		"Horarios":        horarios,
 	})
 }
