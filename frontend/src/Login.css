@@ -18,14 +18,16 @@
     width: 150px;
 }
 
-
 .Login {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f4;
+
+
 }
+
+
 
 .form-container {
     background-color: white;
