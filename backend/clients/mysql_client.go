@@ -141,14 +141,34 @@ func GetActbyId(ID int) (dao.ActDeportiva, error) {
 	}
 	return Act, nil
 }
-func GetActs() ([]dao.ActDeportiva, error) {
-	var Act []dao.ActDeportiva
 
-	txn := DB.Find(&Act)
-	if txn.Error != nil {
-		return []dao.ActDeportiva{}, fmt.Errorf("error getting Activity: %w", txn.Error)
+/*
+	func GetActs() ([]dao.ActDeportiva, error) {
+		var Act []dao.ActDeportiva
+
+		txn := DB.Find(&Act)
+		if txn.Error != nil {
+			return []dao.ActDeportiva{}, fmt.Errorf("error getting Activity: %w", txn.Error)
+		}
+		return Act, nil
 	}
-	return Act, nil
+*/
+func GetActs(filtro string) ([]dao.ActDeportiva, error) {
+	var acts []dao.ActDeportiva
+	query := DB.Model(&dao.ActDeportiva{})
+
+	if filtro != "" {
+		like := "%" + filtro + "%"
+		query = query.Where(`
+			act_deportivas.nombre LIKE ? OR 
+			act_deportivas.nombre_profesor LIKE ?`,
+			like, like).
+			Group("act_deportivas.id_actividad")
+	}
+	if err := query.Find(&acts).Error; err != nil {
+		return nil, fmt.Errorf("error getting Activity: %w", err)
+	}
+	return acts, nil
 }
 
 func GetHorariosByActividad(idActividad int) ([]dao.Horario, error) {
@@ -180,6 +200,7 @@ func GetActInscripcion(IDusuario int) ([]dao.ActDeportiva, []dao.Horario, error)
 func GenerarInscripcion(IDuser int, IDact int, IDhorario int) error {
 	var actividad dao.ActDeportiva
 	var horario dao.Horario
+
 	if err := DB.First(&actividad, IDact).Error; err != nil {
 		return fmt.Errorf("Error: No se encontró la actividad: %w", err)
 	}
@@ -189,20 +210,36 @@ func GenerarInscripcion(IDuser int, IDact int, IDhorario int) error {
 	if horario.Cupos <= 0 {
 		return fmt.Errorf("Error: No hay cupos disponibles para esta actividad")
 	}
+
 	err := DB.Transaction(func(tx *gorm.DB) error {
+		// Validar si ya existe la inscripción
+		var count int64
+		if err := tx.Model(&dao.Inscripcion{}).
+			Where("id_usuario = ? AND id_actividad = ? AND id_horario = ?", IDuser, IDact, IDhorario).
+			Count(&count).Error; err != nil {
+			return fmt.Errorf("Error al verificar inscripción existente: %w", err)
+		}
+		if count > 0 {
+			return fmt.Errorf("Error: El usuario ya está inscripto en esta actividad y horario")
+		}
+
+		// Actualizar cupos si todavía hay disponibles
 		if err := tx.Model(&horario).Where("cupos > 0").Update("cupos", gorm.Expr("cupos - ?", 1)).Error; err != nil {
 			return fmt.Errorf("Error al actualizar cupos: %w", err)
 		}
-		txn := DB.Create(&dao.Inscripcion{
+
+		// Crear inscripción
+		if err := tx.Create(&dao.Inscripcion{
 			IdUsuario:   IDuser,
 			IdActividad: IDact,
 			IdHorario:   IDhorario,
-		})
-		if txn.Error != nil {
-			return fmt.Errorf("Error: No se pudo realizar la inscripcion %w", txn.Error)
+		}).Error; err != nil {
+			return fmt.Errorf("Error: No se pudo realizar la inscripción: %w", err)
 		}
+
 		return nil
 	})
+
 	return err
 }
 

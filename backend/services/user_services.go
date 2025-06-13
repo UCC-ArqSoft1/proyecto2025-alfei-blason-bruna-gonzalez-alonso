@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/Utils"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/clients"
-	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
+	//"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/domain"
 )
 
@@ -27,12 +27,38 @@ func Login(username string, password string) (domain.Usuario, string, error) {
 	return usuario, token, nil
 }
 
-func GetActInscripto(IDuser int) ([]dao.ActDeportiva, []dao.Horario, error) {
+func GetActInscripto(IDuser int) ([]domain.ActDeportiva, []domain.Horario, error) {
 	ActDAO, Horario, err := clients.GetActInscripcion(IDuser)
+
 	if err != nil {
-		return []dao.ActDeportiva{}, Horario, fmt.Errorf("error getting Act: %w", err)
+		return []domain.ActDeportiva{}, []domain.Horario{}, fmt.Errorf("error getting Act: %w", err)
 	}
-	return ActDAO, Horario, nil
+
+	acts := make([]domain.ActDeportiva, 0)
+	for _, act := range ActDAO {
+		acts = append(acts, domain.ActDeportiva{
+			IDActividad:    act.IDActividad,
+			Nombre:         act.Nombre,
+			NombreProfesor: act.NombreProfesor,
+			IdCategoria:    act.IdCategoria,
+			Foto:           act.Foto,
+			Descripcion:    act.Descripcion})
+
+	}
+
+	hs := make([]domain.Horario, 0)
+	for _, horarioDAO := range Horario {
+		hs = append(hs, domain.Horario{
+			IdHorario:     horarioDAO.IdHorario,
+			IdActividad:   horarioDAO.IdActividad,
+			Dia:           horarioDAO.Dia,
+			HorarioInicio: horarioDAO.HorarioInicio,
+			HorarioFin:    horarioDAO.HorarioFin,
+			Cupos:         horarioDAO.Cupos,
+		})
+	}
+
+	return acts, hs, nil
 }
 func InscripcionAct(IDuser int, IDact int, IDhrario int) error {
 	err := clients.GenerarInscripcion(IDuser, IDact, IDhrario)

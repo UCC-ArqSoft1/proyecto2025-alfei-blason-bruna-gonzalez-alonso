@@ -19,10 +19,10 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "JSON inválido"})
 		return
 	}
-
+	
 	user, token, err := services.Login(req.Nombre_usuario, req.Contrasenia)
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -65,6 +65,8 @@ func GetActInscripcion(ctx *gin.Context) {
 			"Dia":             Horario[i].Dia,
 			"Hora Inicio":     Horario[i].HorarioInicio,
 			"Hora Fin":        Horario[i].HorarioFin,
+			"Foto":            act.Foto,
+			"Descripcion":     act.Descripcion,
 		})
 	}
 }

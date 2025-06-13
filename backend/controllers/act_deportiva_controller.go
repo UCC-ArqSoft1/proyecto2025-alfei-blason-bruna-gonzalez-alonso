@@ -37,11 +37,24 @@ func ObtenerAct(ctx *gin.Context) {
 		"Horarios":        horarios,
 	})
 }
+
+/*
 func ObtenerTodasAct(ctx *gin.Context) {
 
-	Actividades, err := services.GetTodasAct()
+		Actividades, err := services.GetTodasAct()
+		if err != nil {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusOK, Actividades)
+	}
+*/
+func ObtenerTodasAct(ctx *gin.Context) {
+	filtro := ctx.Query("filtro") // Lee el parámetro ?nombre=...
+
+	Actividades, err := services.GetTodasAct(filtro)
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, Actividades)
