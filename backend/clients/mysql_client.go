@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/Utils"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
 )
 
@@ -31,96 +32,133 @@ func init() {
 	if err != nil {
 		panic(fmt.Sprintf("error connecting to DB: %v", err))
 	}
-	/*
-		DB.AutoMigrate(&dao.Usuario{})
-		DB.AutoMigrate(&dao.Horario{})
-		DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
-		DB.AutoMigrate(&dao.Inscripcion{})
-		DB.AutoMigrate(&dao.Categoria{})
 
-		DB.Create(&dao.Usuario{
-			NombreUsuario:   "mateo123",
-			ContraseniaHash: Utils.HashSHA256("mateo"),
-			Nombre:          "mateo",
-			Apellido:        "Alfei",
-			DNI:             43928426,
-			Mail:            "mateo123@gmail.com",
-			IsAdmin:         false,
-		})
+	DB.AutoMigrate(&dao.Usuario{})
+	DB.AutoMigrate(&dao.Horario{})
+	DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
+	DB.AutoMigrate(&dao.Inscripcion{})
+	DB.AutoMigrate(&dao.Categoria{})
 
-		DB.Create(&dao.ActDeportiva{
-			Nombre:         "Spinning",
-			NombreProfesor: "Emiliano",
-			IdCategoria:    1,
-			Descripcion: "Actividad cardiovascular que se realiza en una bicicleta fija al ritmo de la música, guiada por un instructor." +
-				" Mejora la resistencia, quema calorías y fortalece piernas y glúteos.",
-			Horarios: []dao.Horario{
-				{
-					Dia:           "Martes",
-					HorarioInicio: "18:00",
-					HorarioFin:    "20:00",
-					Cupos:         10,
-				},
-				{
-					Dia:           "Viernes",
-					HorarioInicio: "14:00",
-					HorarioFin:    "15:00",
-					Cupos:         10,
-				},
+	DB.Create(&dao.Usuario{
+		NombreUsuario:   "mateo123",
+		ContraseniaHash: Utils.HashSHA256("mateo"),
+		Nombre:          "mateo",
+		Apellido:        "Alfei",
+		DNI:             43928426,
+		Mail:            "mateo123@gmail.com",
+		IsAdmin:         false,
+	})
+
+	DB.Create(&dao.ActDeportiva{
+		Nombre:         "Spinning",
+		NombreProfesor: "Emiliano",
+		IdCategoria:    1,
+		Descripcion: "Actividad cardiovascular que se realiza en una bicicleta fija al ritmo de la música, guiada por un instructor." +
+			" Mejora la resistencia, quema calorías y fortalece piernas y glúteos.",
+		Horarios: []dao.Horario{
+			{
+				Dia:           "Martes",
+				HorarioInicio: "18:00",
+				HorarioFin:    "20:00",
+				Cupos:         10,
 			},
-		})
-
-		DB.Create(&dao.ActDeportiva{
-			Nombre:         "Yoga",
-			NombreProfesor: "Juan",
-			IdCategoria:    3,
-			Descripcion: "Disciplina física y mental originaria de la India que combina posturas (asanas), ejercicios de respiración (pranayama) " +
-				"y meditación para mejorar la flexibilidad, la fuerza, el equilibrio y el bienestar general.",
-
-			Horarios: []dao.Horario{
-				{
-					Dia:           "Lunes",
-					HorarioInicio: "10:00",
-					HorarioFin:    "12:00",
-					Cupos:         10,
-				},
-				{
-					Dia:           "Martes",
-					HorarioInicio: "10:00",
-					HorarioFin:    "12:00",
-					Cupos:         10,
-				},
+			{
+				Dia:           "Viernes",
+				HorarioInicio: "14:00",
+				HorarioFin:    "15:00",
+				Cupos:         10,
 			},
-		})
+		},
+	})
 
-		DB.Create(&dao.Usuario{
-			Nombre:          "Martina",
-			Apellido:        "Valdo",
-			NombreUsuario:   "Martina123456",
-			DNI:             46032879,
-			Mail:            "mmmm@gmail.com",
-			ContraseniaHash: Utils.HashSHA256("12345"),
-			IsAdmin:         true,
-		})
+	DB.Create(&dao.ActDeportiva{
+		Nombre:         "Yoga",
+		NombreProfesor: "Juan",
+		IdCategoria:    2,
+		Descripcion: "Disciplina física y mental originaria de la India que combina posturas (asanas), ejercicios de respiración (pranayama) " +
+			"y meditación para mejorar la flexibilidad, la fuerza, el equilibrio y el bienestar general.",
 
-		DB.Create(&dao.Categoria{
-			Nombre: "Musculacion",
-		})
+		Horarios: []dao.Horario{
+			{
+				Dia:           "Lunes",
+				HorarioInicio: "10:00",
+				HorarioFin:    "12:00",
+				Cupos:         10,
+			},
+			{
+				Dia:           "Martes",
+				HorarioInicio: "10:00",
+				HorarioFin:    "12:00",
+				Cupos:         10,
+			},
+		},
+	})
 
-		DB.Create(&dao.Categoria{
-			Nombre: "Funcional",
-		})
+	DB.Create(&dao.Usuario{
+		Nombre:          "Martina",
+		Apellido:        "Valdo",
+		NombreUsuario:   "Martina123456",
+		DNI:             46032879,
+		Mail:            "mmmm@gmail.com",
+		ContraseniaHash: Utils.HashSHA256("12345"),
+		IsAdmin:         true,
+	})
 
-		DB.Create(&dao.Inscripcion{
-			IdUsuario:   1,
-			IdActividad: 1,
-			IdHorario:   1,
-		})
-		DB.Create(&dao.Inscripcion{
-			IdUsuario:   1,
-			IdActividad: 2,
-			IdHorario:   2,
-		})*/
+	DB.Create(&dao.ActDeportiva{
+		Nombre:         "Musculacion",
+		NombreProfesor: "José",
+		IdCategoria:    3,
+		Descripcion: "Es un tipo de entrenamiento físico que busca desarrollar y fortalecer los músculos mediante ejercicios con pesas y resistencia." +
+			" Mejora la fuerza, la salud y la forma del cuerpo.",
+		Horarios: []dao.Horario{
+			{
+				Dia:           "Jueves",
+				HorarioInicio: "8:00",
+				HorarioFin:    "10:00",
+				Cupos:         20,
+			},
+			{
+				Dia:           "Martes",
+				HorarioInicio: "19:00",
+				HorarioFin:    "21:00",
+				Cupos:         10,
+			},
+			{
+				Dia:           "Lunes",
+				HorarioInicio: "15:00",
+				HorarioFin:    "16:00",
+				Cupos:         15,
+			},
+		},
+	})
+
+	DB.Create(&dao.ActDeportiva{
+		Nombre:         "Funcional",
+		NombreProfesor: "Paula",
+		IdCategoria:    4,
+		Descripcion: "Es una forma de entrenamiento que mejora la fuerza, el equilibrio y la movilidad con ejercicios que imitan movimientos de la vida diaria." +
+			" Ideal para ganar rendimiento y prevenir lesiones.",
+		Horarios: []dao.Horario{
+			{
+				Dia:           "Martes",
+				HorarioInicio: "18:00",
+				HorarioFin:    "20:00",
+				Cupos:         10,
+			},
+			{
+				Dia:           "Viernes",
+				HorarioInicio: "14:00",
+				HorarioFin:    "15:00",
+				Cupos:         10,
+			},
+			{
+				Dia:           "Lunes",
+				HorarioInicio: "7:00",
+				HorarioFin:    "9:00",
+				Cupos:         10,
+			},
+		},
+	})
 }
 
 func GetUserByUsername(username string) (dao.Usuario, error) {
