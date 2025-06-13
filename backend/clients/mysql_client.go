@@ -153,6 +153,7 @@ func GetActbyId(ID int) (dao.ActDeportiva, error) {
 		return Act, nil
 	}
 */
+
 func GetActs(filtro string) ([]dao.ActDeportiva, error) {
 	var acts []dao.ActDeportiva
 	query := DB.Model(&dao.ActDeportiva{})
@@ -160,8 +161,8 @@ func GetActs(filtro string) ([]dao.ActDeportiva, error) {
 	if filtro != "" {
 		like := "%" + filtro + "%"
 		query = query.Where(`
-			act_deportivas.nombre LIKE ? OR 
-			act_deportivas.nombre_profesor LIKE ?`,
+				act_deportivas.nombre LIKE ? OR
+				act_deportivas.nombre_profesor LIKE ?`,
 			like, like).
 			Group("act_deportivas.id_actividad")
 	}
