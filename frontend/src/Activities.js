@@ -72,6 +72,11 @@ function Activities() {
                 ) : (
                     filteredActividades.map((item, index) => (
                         <div key={index} className="activity-card" onClick={() => goToDetail(item.actividad.IDActividad)}>
+                            <img
+                                src={item.actividad.Foto}
+                                alt={`Foto de ${item.actividad.Nombre}`}
+                                className="actividad-foto"
+                            />
                             <p><strong>Actividad:</strong> {item.actividad.Nombre}</p>
                             <p><strong>Profesor:</strong> {item.actividad.NombreProfesor}</p>
 
