@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/clients"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
+	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/domain"
 )
 
 /*func GetAct(IDact int) (int, string, error, string, int) {
@@ -21,37 +22,44 @@ func GetTodasAct() ([]dao.ActDeportiva, error) {
 	}
 	return ActDAO, nil
 }*/
-func GetAct(IDact int) (int, string, error, string, []dao.Horario /*[]domain.Horario*/) {
+func GetAct(IDact int) (domain.ActDeportiva, []domain.Horario, error) {
 	ActDAO, err := clients.GetActbyId(IDact)
 	if err != nil {
-		return 0, "", fmt.Errorf("error getting Activity: %w", err), " ", nil
+		return domain.ActDeportiva{}, []domain.Horario{}, fmt.Errorf("error getting horarios: %w", err)
 	}
 	horarios, err := clients.GetHorariosByActividad(IDact)
 	if err != nil {
-		return 0, "", fmt.Errorf("error getting horarios: %w", err), " ", nil
+		return domain.ActDeportiva{}, []domain.Horario{}, fmt.Errorf("error getting horarios: %w", err)
 	}
-	/*hs := make([]domain.Horario, 0)
+	hs := make([]domain.Horario, 0)
 	for _, horarioDAO := range horarios {
 		hs = append(hs, domain.Horario{
-			IdHorario: horarioDAO.IdHorario,
-			IdActividad: horarioDAO.IdActividad,
-			Dia: horarioDAO.Dia,
+			IdHorario:     horarioDAO.IdHorario,
+			IdActividad:   horarioDAO.IdActividad,
+			Dia:           horarioDAO.Dia,
 			HorarioInicio: horarioDAO.HorarioInicio,
-			HorarioFin: horarioDAO.HorarioFin,
-			Cupos: horarioDAO.Cupos
+			HorarioFin:    horarioDAO.HorarioFin,
+			Cupos:         horarioDAO.Cupos,
 		})
-	}*/
+	}
 
-	return ActDAO.IDActividad, ActDAO.Nombre, nil, ActDAO.NombreProfesor, horarios //hs
+	var act domain.ActDeportiva
+	act.IDActividad = ActDAO.IDActividad
+	act.Nombre = ActDAO.Nombre
+	act.Descripcion = ActDAO.Descripcion
+	act.NombreProfesor = ActDAO.NombreProfesor
+	act.Foto = ActDAO.Foto
+	act.IdCategoria = ActDAO.IdCategoria
+	return act, hs, nil
 
 }
-func GetTodasAct() ([]dao.ActConHorarios, error) {
+func GetTodasAct() ([]domain.ActConHorarios, error) {
 	acts, err := clients.GetActs()
 	if err != nil {
 		return nil, fmt.Errorf("error getting Activities: %w", err)
 	}
 
-	var actividadesConHorarios []dao.ActConHorarios
+	var actividadesConHorarios []domain.ActConHorarios
 
 	for _, act := range acts {
 		horarios, err := clients.GetHorariosByActividad(act.IDActividad)
@@ -59,10 +67,27 @@ func GetTodasAct() ([]dao.ActConHorarios, error) {
 			// Si falla obtener horarios de una actividad, podés loguear y seguir o retornar el error
 			return nil, fmt.Errorf("error getting horarios for actividad %d: %w", act.IDActividad, err)
 		}
-
-		actConHorarios := dao.ActConHorarios{
-			Actividad: act,
-			Horarios:  horarios,
+		hs := make([]domain.Horario, 0)
+		for _, horarioDAO := range horarios {
+			hs = append(hs, domain.Horario{
+				IdHorario:     horarioDAO.IdHorario,
+				IdActividad:   horarioDAO.IdActividad,
+				Dia:           horarioDAO.Dia,
+				HorarioInicio: horarioDAO.HorarioInicio,
+				HorarioFin:    horarioDAO.HorarioFin,
+				Cupos:         horarioDAO.Cupos,
+			})
+		}
+		var actss domain.ActDeportiva
+		actss.IDActividad = act.IDActividad
+		actss.Nombre = act.Nombre
+		actss.Descripcion = act.Descripcion
+		actss.NombreProfesor = act.NombreProfesor
+		actss.Foto = act.Foto
+		actss.IdCategoria = act.IdCategoria
+		actConHorarios := domain.ActConHorarios{
+			Actividad: actss,
+			Horarios:  hs,
 		}
 
 		actividadesConHorarios = append(actividadesConHorarios, actConHorarios)

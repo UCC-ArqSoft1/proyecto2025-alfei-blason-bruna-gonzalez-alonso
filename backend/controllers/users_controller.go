@@ -20,7 +20,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	user, token, err, IsAdmin := services.Login(req.Nombre_usuario, req.Contrasenia)
+	user, token, err := services.Login(req.Nombre_usuario, req.Contrasenia)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -29,9 +29,9 @@ func Login(ctx *gin.Context) {
 	// En este punto, deberías generar un JWT (lo vemos en el siguiente paso)
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "Login exitoso",
-		"usuario": user,
+		"usuario": user.IDUsuario,
 		"token":   token, // en el paso 3 lo agregamos
-		"isAdmin": IsAdmin,
+		"isAdmin": user.IsAdmin,
 	})
 }
 func CORS(ctx *gin.Context) {

@@ -23,17 +23,17 @@ func ObtenerAct(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
 		return
 	}
-	IDactivity, Nombreact, err, Nombreprofesor, horarios := services.GetAct(IDactividad)
-	if err != nil {
+	actividad, horarios, error := services.GetAct(IDactividad)
+	if error != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"message":         "Obtención exitosa",
-		"ActId":           IDactivity,
-		"NombreActividad": Nombreact,
-		"NombreProfesor":  Nombreprofesor,
+		"ActId":           actividad.IDActividad,
+		"NombreActividad": actividad.Nombre,
+		"NombreProfesor":  actividad.NombreProfesor,
 		"Horarios":        horarios,
 	})
 }

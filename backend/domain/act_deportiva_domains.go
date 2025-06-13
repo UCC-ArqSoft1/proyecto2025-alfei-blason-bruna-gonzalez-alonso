@@ -1,13 +1,13 @@
 package domain
 
 type ActDeportiva struct {
-	IDActividad    int       `json: "id"`
-	Nombre         string    `json: "name"`
-	NombreProfesor string    `json: "profesor"`
-	IdCategoria    int       `json: "category"`
-	Horarios       []Horario `json: "horario"`
-	Foto           string    `json: "fotoURL"`
-	Descripcion    string    `json: "descripcion"`
+	IDActividad    int       `json: "IDActividad"`
+	Nombre         string    `json: "Nombre"`
+	NombreProfesor string    `json: "NombreProfesor"`
+	IdCategoria    int       `json: "IdCategoria"`
+	Horarios       []Horario `json: "Horarios"`
+	Foto           string    `json: "Foto"`
+	Descripcion    string    `json: "Descripcion"`
 }
 
 type Usuario struct {
@@ -23,12 +23,12 @@ type Usuario struct {
 }
 
 type Horario struct {
-	IdHorario     int    `json:"id"`
-	IdActividad   int    `json:"activity"`
-	Dia           string `json:"days"`
-	HorarioInicio string `json:"hourstart"`
-	HorarioFin    string `json:"hourfinish"`
-	Cupos         int    `json:"cupos"`
+	IdHorario     int    `json:"IdHorario"`
+	IdActividad   int    `json:"IdActividad"`
+	Dia           string `json:"Dia"`
+	HorarioInicio string `json:"HorarioInicio"`
+	HorarioFin    string `json:"HorarioFin"`
+	Cupos         int    `json:"Cupos"`
 }
 
 type ActConHorarios struct {
