@@ -72,18 +72,25 @@ func GetActInscripcion(ctx *gin.Context) {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
+
+	var actividadesInscripto []gin.H
+
 	for i, act := range actividades {
-		ctx.JSON(http.StatusOK, gin.H{
+		actividad := gin.H{
 			"NombreActividad": act.Nombre,
 			"NombreProfesor":  act.NombreProfesor,
 			"Cupos":           horario[i].Cupos,
 			"Dia":             horario[i].Dia,
-			"Hora Inicio":     horario[i].HorarioInicio,
-			"Hora Fin":        horario[i].HorarioFin,
+			"HoraInicio":      horario[i].HorarioInicio,
+			"HoraFin":         horario[i].HorarioFin,
 			"Foto":            act.Foto,
 			"Descripcion":     act.Descripcion,
-		})
+			"IDActividad":     act.IDActividad,
+		}
+		actividadesInscripto = append(actividadesInscripto, actividad)
 	}
+
+	ctx.JSON(http.StatusOK, actividadesInscripto)
 }
 
 type InscricionReq struct {

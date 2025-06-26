@@ -63,7 +63,15 @@ function Activities() {
 
     return (
         <>
-            <button onClick={volverAlLogin} className="botonVolver"> ← Volver </button>
+            <div className="header-buttons">
+                <button onClick={volverAlLogin} className="botonVolver">← Volver</button>
+                <div className="espaciador" />
+                <button onClick={() => navigate("/my-activities")} className="botonMisActividades">
+                    Mis actividades
+                </button>
+            </div>
+
+
             <div className="container">
                 <h1 className="title">Bienvenido a la página de Actividades</h1>
 

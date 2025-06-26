@@ -102,3 +102,32 @@
 .botonCrear:hover {
     background-color: #138496;
 }
+
+.header-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+}
+
+.espaciador {
+    flex: 1;
+}
+
+.botonMisActividades {
+    background-color: #bc7848;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    right: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+
+}
+
+.botonMisActividades:hover {
+    background-color: #bc7848;
+}
