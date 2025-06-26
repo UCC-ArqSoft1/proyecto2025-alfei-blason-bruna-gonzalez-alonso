@@ -92,7 +92,7 @@ func CrearAct(ctx *gin.Context) {
 	}
 
 	if !claims.IsAdmin {
-		ctx.JSON(http.StatusForbidden, gin.H{"error": "No sos admin"})
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "No eres admin"})
 		return
 	}
 
@@ -122,14 +122,21 @@ func CrearAct(ctx *gin.Context) {
 }
 func EliminarAct(ctx *gin.Context) {
 	authHeader := ctx.GetHeader("Authorization")
-	claims, err := Utils.VerifyToken(authHeader)
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Token requerido"})
+		return
+	}
+
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+	claims, err := Utils.VerifyToken(tokenString)
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Token inválido"})
 		return
 	}
 
 	if !claims.IsAdmin {
-		ctx.JSON(http.StatusForbidden, gin.H{"error": "No tenés permisos para eliminar actividades"})
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "No eres admin"})
 		return
 	}
 
@@ -150,14 +157,21 @@ func EliminarAct(ctx *gin.Context) {
 
 func EditarAct(ctx *gin.Context) {
 	authHeader := ctx.GetHeader("Authorization")
-	claims, err := Utils.VerifyToken(authHeader)
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Token requerido"})
+		return
+	}
+
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+	claims, err := Utils.VerifyToken(tokenString)
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Token inválido"})
 		return
 	}
 
 	if !claims.IsAdmin {
-		ctx.JSON(http.StatusForbidden, gin.H{"error": "No tenés permisos para editar actividades"})
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "No eres admin"})
 		return
 	}
 
