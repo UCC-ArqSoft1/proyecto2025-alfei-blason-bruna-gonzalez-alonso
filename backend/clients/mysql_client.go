@@ -168,14 +168,14 @@ func GetUserByUsername(username string) (dao.Usuario, error) {
 	}
 	return user, nil
 }
-func GetActbyId(ID int) (dao.ActDeportiva, error) {
-	var Act dao.ActDeportiva
+func GetActbyId(id int) (dao.ActDeportiva, error) {
+	var act dao.ActDeportiva
 
-	txn := DB.First(&Act, "id_actividad = ?", ID)
+	txn := DB.First(&act, "id_actividad = ?", id)
 	if txn.Error != nil {
 		return dao.ActDeportiva{}, fmt.Errorf("error getting Activity: %w", txn.Error)
 	}
-	return Act, nil
+	return act, nil
 }
 
 /*
@@ -215,10 +215,10 @@ func GetHorariosByActividad(idActividad int) ([]dao.Horario, error) {
 }
 func GetActInscripcion(IDusuario int) ([]dao.ActDeportiva, []dao.Horario, error) {
 	var Inscripcion []dao.Inscripcion
-	var Horarios []dao.Horario
+	var horarios []dao.Horario
 	err := DB.Where("Id_usuario = ?", IDusuario).Find(&Inscripcion).Error
 	if err != nil {
-		return []dao.ActDeportiva{}, Horarios, fmt.Errorf("Error: el usuario no se encuentra inscripto %w", err)
+		return []dao.ActDeportiva{}, horarios, fmt.Errorf("Error: el usuario no se encuentra inscripto %w", err)
 	}
 	var actividades []dao.ActDeportiva //lista que contendra las act a las que esta inscripto el usuario
 	for _, insc := range Inscripcion { //recorre la lista de inscripciones obtenida anteriormente
@@ -229,19 +229,19 @@ func GetActInscripcion(IDusuario int) ([]dao.ActDeportiva, []dao.Horario, error)
 		}
 		var horario dao.Horario
 		if err := DB.First(&horario, "id_horario = ?", insc.IdHorario).Error; err == nil {
-			Horarios = append(Horarios, horario)
+			horarios = append(horarios, horario)
 		}
 	}
-	return actividades, Horarios, nil
+	return actividades, horarios, nil
 }
-func GenerarInscripcion(IDuser int, IDact int, IDhorario int) error {
+func GenerarInscripcion(iduser int, idact int, idhorario int) error {
 	var actividad dao.ActDeportiva
 	var horario dao.Horario
 
-	if err := DB.First(&actividad, IDact).Error; err != nil {
+	if err := DB.First(&actividad, idact).Error; err != nil {
 		return fmt.Errorf("Error: No se encontró la actividad: %w", err)
 	}
-	if err := DB.First(&horario, IDhorario).Error; err != nil {
+	if err := DB.First(&horario, idhorario).Error; err != nil {
 		return fmt.Errorf("Error: No se encontró el horario: %w", err)
 	}
 	if horario.Cupos <= 0 {
@@ -252,7 +252,7 @@ func GenerarInscripcion(IDuser int, IDact int, IDhorario int) error {
 		// Validar si ya existe la inscripción
 		var count int64
 		if err := tx.Model(&dao.Inscripcion{}).
-			Where("id_usuario = ? AND id_actividad = ? AND id_horario = ?", IDuser, IDact, IDhorario).
+			Where("id_usuario = ? AND id_actividad = ? AND id_horario = ?", iduser, idact, idhorario).
 			Count(&count).Error; err != nil {
 			return fmt.Errorf("Error al verificar inscripción existente: %w", err)
 		}
@@ -267,9 +267,9 @@ func GenerarInscripcion(IDuser int, IDact int, IDhorario int) error {
 
 		// Crear inscripción
 		if err := tx.Create(&dao.Inscripcion{
-			IdUsuario:   IDuser,
-			IdActividad: IDact,
-			IdHorario:   IDhorario,
+			IdUsuario:   iduser,
+			IdActividad: idact,
+			IdHorario:   idhorario,
 		}).Error; err != nil {
 			return fmt.Errorf("Error: No se pudo realizar la inscripción: %w", err)
 		}
@@ -288,10 +288,24 @@ func CrearAct(actividad *dao.ActDeportiva) error {
 	return nil
 }
 
-func EliminarAct(IDact int) error {
-	txn := DB.Delete(&dao.ActDeportiva{}, IDact)
+func EliminarAct(idact int) error {
+	txn := DB.Delete(&dao.ActDeportiva{}, idact)
 	if txn.Error != nil {
-		return fmt.Errorf("error eliminando actividad con ID %d: %w", IDact, txn.Error)
+		return fmt.Errorf("error eliminando actividad con ID %d: %w", idact, txn.Error)
+	}
+	return nil
+}
+func Eliminarinscripcion(idiscrip int) error {
+	var inscripcion dao.Inscripcion
+	var horario dao.Horario
+	DB.First(&inscripcion, "id_inscripcion = ?", idiscrip)
+	txn := DB.First(&horario, "id_horario = ?", inscripcion.IdHorario)
+	if err := txn.Model(&horario).Update("cupos", gorm.Expr("cupos + ?", 1)).Error; err != nil {
+		return fmt.Errorf("Error al actualizar cupos: %w", err)
+	}
+	txn2 := DB.Delete(&dao.Inscripcion{}, idiscrip)
+	if txn.Error != nil {
+		return fmt.Errorf("error eliminando actividad con ID %d: %w", idiscrip, txn2.Error)
 	}
 	return nil
 }

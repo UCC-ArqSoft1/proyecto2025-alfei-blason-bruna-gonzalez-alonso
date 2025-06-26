@@ -11,18 +11,28 @@ const (
 	jwtSecret   = "jwtSecret"
 )
 
-func GenerateJWT(userID int) (string, error) {
+type CustomClaims struct {
+	UserID  int  `json:"user_id"`
+	IsAdmin bool `json:"is_admin"`
+	jwt.RegisteredClaims
+}
+
+func GenerateJWT(userID int, isAdmin bool) (string, error) {
 	// Setear expiracion
 	expirationTime := time.Now().Add(jwtDuration)
 
 	// Construir los claims
-	claims := jwt.RegisteredClaims{
-		ExpiresAt: jwt.NewNumericDate(expirationTime),
-		IssuedAt:  jwt.NewNumericDate(time.Now()),
-		NotBefore: jwt.NewNumericDate(time.Now()),
-		Issuer:    "backend",
-		Subject:   "auth",
-		ID:        fmt.Sprintf("%d", userID),
+	claims := CustomClaims{
+		UserID:  userID,
+		IsAdmin: isAdmin,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			NotBefore: jwt.NewNumericDate(time.Now()),
+			Issuer:    "backend",
+			Subject:   "auth",
+			ID:        fmt.Sprintf("%d", userID),
+		},
 	}
 
 	// Crear el token

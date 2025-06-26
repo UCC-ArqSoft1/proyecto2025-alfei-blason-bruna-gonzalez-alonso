@@ -18,12 +18,12 @@ type ActIDActividad struct {
 func ObtenerAct(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 
-	IDactividad, err := strconv.Atoi(idParam)
+	idactividad, err := strconv.Atoi(idParam)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
 		return
 	}
-	actividad, horarios, error := services.GetAct(IDactividad)
+	actividad, horarios, error := services.GetAct(idactividad)
 	if error != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -54,12 +54,12 @@ func ObtenerTodasAct(ctx *gin.Context) {
 func ObtenerTodasAct(ctx *gin.Context) {
 	filtro := ctx.Query("filtro") // Lee el parámetro ?nombre=...
 
-	Actividades, err := services.GetTodasAct(filtro)
+	actividades, err := services.GetTodasAct(filtro)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, Actividades)
+	ctx.JSON(http.StatusOK, actividades)
 }
 
 type Crear struct {
@@ -75,22 +75,22 @@ type Crear struct {
 }
 
 func CrearAct(ctx *gin.Context) {
-	var Act Crear
-	if err := ctx.ShouldBindJSON(&Act); err != nil {
+	var act Crear
+	if err := ctx.ShouldBindJSON(&act); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"Error: ": "JSON invalido"})
 		return
 	}
 	actividad := &dao.ActDeportiva{
-		Nombre:         Act.Nombre,
-		NombreProfesor: Act.NombreProfesor,
+		Nombre:         act.Nombre,
+		NombreProfesor: act.NombreProfesor,
 		Horarios: []dao.Horario{{
-			Dia:           Act.Dia,
-			HorarioInicio: Act.HorarioInicio,
-			HorarioFin:    Act.HorarioFin,
-			Cupos:         Act.Cupos,
+			Dia:           act.Dia,
+			HorarioInicio: act.HorarioInicio,
+			HorarioFin:    act.HorarioFin,
+			Cupos:         act.Cupos,
 		}},
-		Foto:        Act.Foto,
-		Descripcion: Act.Descripcion,
+		Foto:        act.Foto,
+		Descripcion: act.Descripcion,
 	}
 	err := services.CrearActividad(actividad)
 	if err != nil {
@@ -102,12 +102,12 @@ func CrearAct(ctx *gin.Context) {
 func EliminarAct(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 
-	IDactividad, err := strconv.Atoi(idParam)
+	idactividad, err := strconv.Atoi(idParam)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
 		return
 	}
-	error := services.EliminarActividad(IDactividad)
+	error := services.EliminarActividad(idactividad)
 	if error != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": error.Error()})
 		return
@@ -117,7 +117,7 @@ func EliminarAct(ctx *gin.Context) {
 
 func EditarAct(ctx *gin.Context) {
 	idParam := ctx.Param("id")
-	IDactividad, err := strconv.Atoi(idParam)
+	idactividad, err := strconv.Atoi(idParam)
 	var act Crear
 	if err := ctx.ShouldBindJSON(&act); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"Error: ": "JSON invalido"})
@@ -125,7 +125,7 @@ func EditarAct(ctx *gin.Context) {
 	}
 
 	actividad := &dao.ActDeportiva{
-		IDActividad:    IDactividad,
+		IDActividad:    idactividad,
 		Nombre:         act.Nombre,
 		NombreProfesor: act.NombreProfesor,
 		Horarios: []dao.Horario{{

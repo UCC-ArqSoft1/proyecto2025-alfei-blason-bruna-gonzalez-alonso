@@ -16,7 +16,7 @@ func Login(ctx *gin.Context) {
 	var req LoginRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "JSON inválido"})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "JSON inválido"})
 		return
 	}
 
@@ -45,14 +45,29 @@ func CORS(ctx *gin.Context) {
 	ctx.Next()
 }
 
+func Eliminarinscripcion(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+
+	idinscripcion, err := strconv.Atoi(idParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID martina"})
+		return
+	}
+	error := services.Eliminarinscripcion(idinscripcion)
+	if error != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": error.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "La actividad se elimino correctamente"})
+}
 func GetActInscripcion(ctx *gin.Context) {
 	idParam := ctx.Param("id")
-	IDusuario, err := strconv.Atoi(idParam)
+	idusuario, err := strconv.Atoi(idParam)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id del usuario invalido"})
 		return
 	}
-	actividades, Horario, err := services.GetActInscripto(IDusuario)
+	actividades, horario, err := services.GetActInscripto(idusuario)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -61,10 +76,10 @@ func GetActInscripcion(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"NombreActividad": act.Nombre,
 			"NombreProfesor":  act.NombreProfesor,
-			"Cupos":           Horario[i].Cupos,
-			"Dia":             Horario[i].Dia,
-			"Hora Inicio":     Horario[i].HorarioInicio,
-			"Hora Fin":        Horario[i].HorarioFin,
+			"Cupos":           horario[i].Cupos,
+			"Dia":             horario[i].Dia,
+			"Hora Inicio":     horario[i].HorarioInicio,
+			"Hora Fin":        horario[i].HorarioFin,
 			"Foto":            act.Foto,
 			"Descripcion":     act.Descripcion,
 		})
@@ -78,7 +93,7 @@ type InscricionReq struct {
 
 func InscripcionActividad(ctx *gin.Context) {
 	idParam := ctx.Param("id")
-	IDusuario, err := strconv.Atoi(idParam)
+	idusuario, err := strconv.Atoi(idParam)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id del usuario invalido"})
 		return
@@ -91,9 +106,9 @@ func InscripcionActividad(ctx *gin.Context) {
 		return
 	}
 
-	err = services.InscripcionAct(IDusuario, req.IdActividad, req.IdHorario)
+	err = services.InscripcionAct(idusuario, req.IdActividad, req.IdHorario)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "Incripcion exitosa"})

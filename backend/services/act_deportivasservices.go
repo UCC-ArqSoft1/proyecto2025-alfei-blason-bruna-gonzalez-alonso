@@ -8,7 +8,7 @@ import (
 )
 
 func GetAct(IDact int) (domain.ActDeportiva, []domain.Horario, error) {
-	ActDAO, err := clients.GetActbyId(IDact)
+	actDAO, err := clients.GetActbyId(IDact)
 	if err != nil {
 		return domain.ActDeportiva{}, []domain.Horario{}, fmt.Errorf("error getting horarios: %w", err)
 	}
@@ -29,11 +29,11 @@ func GetAct(IDact int) (domain.ActDeportiva, []domain.Horario, error) {
 	}
 
 	var act domain.ActDeportiva
-	act.IDActividad = ActDAO.IDActividad
-	act.Nombre = ActDAO.Nombre
-	act.Descripcion = ActDAO.Descripcion
-	act.NombreProfesor = ActDAO.NombreProfesor
-	act.Foto = ActDAO.Foto
+	act.IDActividad = actDAO.IDActividad
+	act.Nombre = actDAO.Nombre
+	act.Descripcion = actDAO.Descripcion
+	act.NombreProfesor = actDAO.NombreProfesor
+	act.Foto = actDAO.Foto
 	return act, hs, nil
 
 }
@@ -131,8 +131,8 @@ func CrearActividad(actividad *dao.ActDeportiva) error {
 	return nil
 }
 
-func EliminarActividad(Idact int) error {
-	err := clients.EliminarAct(Idact)
+func EliminarActividad(idact int) error {
+	err := clients.EliminarAct(idact)
 	if err != nil {
 		return fmt.Errorf("error eliminando la actividad: %w", err)
 	}

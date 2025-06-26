@@ -16,5 +16,6 @@ func main() {
 	router.POST("/act_deportiva", controllers.CrearAct)
 	router.PUT("/act_deportiva/:id", controllers.EditarAct)
 	router.DELETE("/act_deportiva/:id", controllers.EliminarAct)
+	router.DELETE("/users/inscripciones/:id", controllers.Eliminarinscripcion)
 	router.Run(":8080")
 }

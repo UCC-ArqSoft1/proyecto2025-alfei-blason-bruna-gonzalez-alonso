@@ -19,22 +19,22 @@ func Login(username string, password string) (domain.Usuario, string, error) {
 	if Utils.HashSHA256(password) != userDAO.ContraseniaHash {
 		return domain.Usuario{}, "", fmt.Errorf("invalid password")
 	}
-	token, err := Utils.GenerateJWT(userDAO.IDUsuario)
+	token, err := Utils.GenerateJWT(userDAO.IDUsuario, userDAO.IsAdmin)
 	if err != nil {
 		return domain.Usuario{}, "", fmt.Errorf("error generating token: %w", err)
 	}
 	return usuario, token, nil
 }
 
-func GetActInscripto(IDuser int) ([]domain.ActDeportiva, []domain.Horario, error) {
-	ActDAO, Horario, err := clients.GetActInscripcion(IDuser)
+func GetActInscripto(iduser int) ([]domain.ActDeportiva, []domain.Horario, error) {
+	actDAO, horario, err := clients.GetActInscripcion(iduser)
 
 	if err != nil {
 		return []domain.ActDeportiva{}, []domain.Horario{}, fmt.Errorf("error getting Act: %w", err)
 	}
 
 	acts := make([]domain.ActDeportiva, 0)
-	for _, act := range ActDAO {
+	for _, act := range actDAO {
 		acts = append(acts, domain.ActDeportiva{
 			IDActividad:    act.IDActividad,
 			Nombre:         act.Nombre,
@@ -45,7 +45,7 @@ func GetActInscripto(IDuser int) ([]domain.ActDeportiva, []domain.Horario, error
 	}
 
 	hs := make([]domain.Horario, 0)
-	for _, horarioDAO := range Horario {
+	for _, horarioDAO := range horario {
 		hs = append(hs, domain.Horario{
 			IdHorario:     horarioDAO.IdHorario,
 			IdActividad:   horarioDAO.IdActividad,
@@ -58,10 +58,17 @@ func GetActInscripto(IDuser int) ([]domain.ActDeportiva, []domain.Horario, error
 
 	return acts, hs, nil
 }
-func InscripcionAct(IDuser int, IDact int, IDhrario int) error {
-	err := clients.GenerarInscripcion(IDuser, IDact, IDhrario)
+func InscripcionAct(iduser int, idact int, idhrario int) error {
+	err := clients.GenerarInscripcion(iduser, idact, idhrario)
 	if err != nil {
 		return fmt.Errorf("error generando inscripcion: %w", err)
+	}
+	return nil
+}
+func Eliminarinscripcion(idinscrip int) error {
+	err := clients.Eliminarinscripcion(idinscrip)
+	if err != nil {
+		return fmt.Errorf("error eliminando la actividad: %w", err)
 	}
 	return nil
 }
