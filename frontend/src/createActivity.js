@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import './createActivity.css';
 
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(";").shift();
-        return null;
-    }
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+    return null;
+}
 
-    function CreateActivity() {
+function CreateActivity() {
     const [nombre, setNombre] = useState("");
     const [profesor, setProfesor] = useState("");
     const [dia, setDia] = useState("");
@@ -23,6 +24,8 @@ import { useNavigate } from "react-router-dom";
         e.preventDefault();
 
         const rol = getCookie("rol");
+        const token = getCookie("token");
+
         if (rol !== "ADMIN") {
             alert("No tenés permisos para crear actividades.");
             return;
@@ -42,17 +45,26 @@ import { useNavigate } from "react-router-dom";
         try {
             const response = await fetch("http://localhost:8080/act_deportiva", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify(nuevaActividad)
             });
 
-            if (!response.ok) throw new Error("Error en la creación");
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                alert(responseData.error || responseData.Mensaje || "Error al crear la actividad.");
+                return;
+            }
 
             alert("¡Actividad creada con éxito!");
             navigate("/activities");
+
         } catch (err) {
-            console.error(err);
-            alert("Error al crear actividad.");
+            console.error("Error al crear actividad:", err);
+            alert("Error de red o del servidor.");
         }
     };
 

@@ -46,3 +46,18 @@ func GenerateJWT(userID int, isAdmin bool) (string, error) {
 
 	return tokenString, nil
 }
+func VerifyToken(tokenString string) (*CustomClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte("jwtSecret"), nil
+	})
+	if err != nil || !token.Valid {
+		return nil, fmt.Errorf("token inválido")
+	}
+
+	claims, ok := token.Claims.(*CustomClaims)
+	if !ok {
+		return nil, fmt.Errorf("no se pudieron obtener los claims")
+	}
+
+	return claims, nil
+}

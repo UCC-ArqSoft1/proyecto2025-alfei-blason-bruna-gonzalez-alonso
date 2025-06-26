@@ -3,9 +3,11 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/Utils"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/services"
 	"strconv"
+	"strings"
 )
 
 type ActIDActividad struct {
@@ -75,6 +77,25 @@ type Crear struct {
 }
 
 func CrearAct(ctx *gin.Context) {
+	authHeader := ctx.GetHeader("Authorization")
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Token requerido"})
+		return
+	}
+
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+	claims, err := Utils.VerifyToken(tokenString)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Token inválido"})
+		return
+	}
+
+	if !claims.IsAdmin {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "No sos admin"})
+		return
+	}
+
 	var act Crear
 	if err := ctx.ShouldBindJSON(&act); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"Error: ": "JSON invalido"})
@@ -92,7 +113,7 @@ func CrearAct(ctx *gin.Context) {
 		Foto:        act.Foto,
 		Descripcion: act.Descripcion,
 	}
-	err := services.CrearActividad(actividad)
+	err = services.CrearActividad(actividad)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -100,6 +121,18 @@ func CrearAct(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "La actividad se creo correctamente"})
 }
 func EliminarAct(ctx *gin.Context) {
+	authHeader := ctx.GetHeader("Authorization")
+	claims, err := Utils.VerifyToken(authHeader)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !claims.IsAdmin {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "No tenés permisos para eliminar actividades"})
+		return
+	}
+
 	idParam := ctx.Param("id")
 
 	idactividad, err := strconv.Atoi(idParam)
@@ -116,6 +149,18 @@ func EliminarAct(ctx *gin.Context) {
 }
 
 func EditarAct(ctx *gin.Context) {
+	authHeader := ctx.GetHeader("Authorization")
+	claims, err := Utils.VerifyToken(authHeader)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !claims.IsAdmin {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "No tenés permisos para editar actividades"})
+		return
+	}
+
 	idParam := ctx.Param("id")
 	idactividad, err := strconv.Atoi(idParam)
 	var act Crear

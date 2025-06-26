@@ -1,0 +1,47 @@
+.create-form {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 30px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.create-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.create-form form input,
+.create-form form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.create-form form textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.create-form form button {
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    font-size: 18px;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.create-form form button:hover {
+    background-color: #0056b3;
+}
