@@ -101,3 +101,10 @@
     height: auto;
     margin-bottom: 10px;
 }
+.botonInscripcion:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+    color: #f1f1f1;
+    font-weight: bold;
+    opacity: 0.8;
+}

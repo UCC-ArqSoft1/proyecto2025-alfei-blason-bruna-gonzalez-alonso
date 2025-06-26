@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import "./Details.css";
 import {useNavigate, useParams} from "react-router-dom";
 
-    function Details() {
+function Details() {
     const { id } = useParams();
     const [detalle, setDetalle] = useState(null);
     const navigate = useNavigate();
     const [inscripcionExitosa, setInscripcionExitosa] = useState(false);
+    const [inscripcionesRealizadas, setInscripcionesRealizadas] = useState(() => {
+        const guardadas = localStorage.getItem("inscripciones");
+        return guardadas ? JSON.parse(guardadas) : [];
+    });
 
     function getCookie(name) {
         const value = `; ${document.cookie}`;
@@ -20,33 +24,28 @@ import {useNavigate, useParams} from "react-router-dom";
     };
 
     const handleClick = async (id_horario) => {
-        console.log("Captured // click")
-        console.log(`id_horario ${id_horario}`)
-
         try {
-            function getCookie(name) {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) return parts.pop().split(';').shift();
-            }
-
             const userID = getCookie('user_id');
             const token = getCookie('token');
-            console.log('Usuario:', userID);
-            console.log('Token:', token);
 
             const response = await fetch(`http://localhost:8080/users/${userID}/inscripciones`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({id_horario: id_horario, id_actividad: parseInt(id)})
             });
 
             if (response.ok) {
                 setInscripcionExitosa(true);
-                // Restar 1 al cupo en el estado
-                const nuevoDetalle = { ...detalle }; // copia del objeto
+                setInscripcionesRealizadas(prev => {
+                    const nuevas = [...prev, id_horario];
+                    localStorage.setItem("inscripciones", JSON.stringify(nuevas));
+                    return nuevas;
+                });
+
+                const nuevoDetalle = { ...detalle };
                 nuevoDetalle.Horarios = detalle.Horarios.map((h) =>
                     h.IdHorario === id_horario ? { ...h, Cupos: h.Cupos - 1 } : h
                 );
@@ -55,10 +54,11 @@ import {useNavigate, useParams} from "react-router-dom";
                 console.error("Inscripción fallida");
             }
 
-        }catch (error){
-            console.error("Inscripcion fallida", error);
+        } catch (error) {
+            console.error("Inscripción fallida", error);
         }
-    }
+    };
+
 
     const handleEliminar = async () => {
         const confirmacion = window.confirm("¿Estás seguro de eliminar esta actividad?");
@@ -81,6 +81,8 @@ import {useNavigate, useParams} from "react-router-dom";
         }
     };
 
+    
+
 
     useEffect(() => {
         console.log("cargado actividades");
@@ -91,6 +93,7 @@ import {useNavigate, useParams} from "react-router-dom";
     }, [id]);
 
     if (!detalle) return <p>Cargando detalles...</p>;
+
 
     return (
         <>
@@ -108,10 +111,10 @@ import {useNavigate, useParams} from "react-router-dom";
                 {getCookie("rol") === "ADMIN" && (
                     <div className="admin-buttons">
                         <button className="botonEditar" onClick={() => navigate(`/edit-activity/${id}`)}>
-                            ✏️ Editar Actividad
+                            Editar Actividad
                         </button>
                         <button className="botonEliminar" onClick={handleEliminar}>
-                            🗑️ Eliminar Actividad
+                            Eliminar Actividad
                         </button>
                     </div>
                 )}
@@ -131,14 +134,26 @@ import {useNavigate, useParams} from "react-router-dom";
                         const duracion = `${Math.floor(duracionMin / 60)}h ${duracionMin % 60}min`; //convierte la duracion a horas y minutos
                         const cuposDisponibles = h.Cupos > 0;
 
+                        const yaInscripto = inscripcionesRealizadas.includes(h.IdHorario);
+
                         return (
                             <li key={i}>
                                 {h.Dia} de {h.HorarioInicio} a {h.HorarioFin} ({duracion}) Cupos: {h.Cupos}
-                                <button type="submit"
-                                        className="botonInscripcion"
-                                        onClick={() => handleClick(h.IdHorario)}> {cuposDisponibles ? "Inscribirme" : "Sin cupos"} </button>
+                                <button
+                                    type="submit"
+                                    className="botonInscripcion"
+                                    disabled={!cuposDisponibles || yaInscripto}
+                                    onClick={() => handleClick(h.IdHorario)}
+                                    style={{
+                                        backgroundColor: yaInscripto ? "gray" : "",
+                                        cursor: yaInscripto ? "not-allowed" : "pointer"
+                                    }}
+                                >
+                                    {yaInscripto ? "Inscripto" : (cuposDisponibles ? "Inscribirme" : "Sin cupos")}
+                                </button>
                             </li>
                         );
+
                     })}
                 </ul>
             </div>

@@ -80,7 +80,7 @@ function Activities() {
                         className="botonCrear"
                         onClick={() => navigate("/create-activity")}
                     >
-                        ➕ Crear nueva actividad
+                        Crear nueva actividad
                     </button>
                 )}
 
