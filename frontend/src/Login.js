@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import './Login.css';
 import { useNavigate } from "react-router-dom";
 
-
 function Login() {
 
     const [usuario, setUsuario] = useState("");
@@ -37,6 +36,10 @@ function Login() {
 
                 document.cookie = `user_id=${data.usuario}; path=/; SameSite=Strict;`;
                 document.cookie = `token=${data.token}; path=/; SameSite=Strict;`;
+                document.cookie = `rol=${data.isAdmin ? "ADMIN" : "USER"}; path=/; SameSite=Strict;`;
+
+
+
 
                 navigate("/Activities");
 

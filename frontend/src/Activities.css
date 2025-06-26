@@ -86,3 +86,19 @@
 .botonVolver:hover {
     background-color: #c0392b;
 }
+
+.botonCrear {
+    margin: 20px 0;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #8f8f8f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.botonCrear:hover {
+    background-color: #138496;
+}

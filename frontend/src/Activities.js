@@ -2,6 +2,14 @@ import React, { useEffect, useState } from "react";
 import "./Activities.css";
 import { useNavigate } from "react-router-dom";
 
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+    return null;
+}
+
+
 function useLogout() {
     const navigate = useNavigate();
 
@@ -67,13 +75,27 @@ function Activities() {
                     className="search-input"
                 />
 
+                {getCookie("rol") === "ADMIN" && (
+                    <button
+                        className="botonCrear"
+                        onClick={() => navigate("/create-activity")}
+                    >
+                        ➕ Crear nueva actividad
+                    </button>
+                )}
+
+
                 {Array.isArray(filteredActividades) && filteredActividades.length === 0 ? (
                     <p>No se encontraron actividades.</p>
                 ) : (
                     filteredActividades.map((item, index) => (
                         <div key={index} className="activity-card" onClick={() => goToDetail(item.actividad.IDActividad)}>
                             <img
-                                src={item.actividad.Foto}
+                                src={
+                                    item.actividad.Foto && item.actividad.Foto.trim() !== ""
+                                        ? item.actividad.Foto
+                                        : "https://via.placeholder.com/300x200?text=Sin+imagen"
+                                }
                                 alt={`Foto de ${item.actividad.Nombre}`}
                                 className="actividad-foto"
                             />

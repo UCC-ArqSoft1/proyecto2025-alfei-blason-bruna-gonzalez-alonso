@@ -1,0 +1,76 @@
+.admin-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.botonEditar,
+.botonEliminar {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s ease;
+}
+
+.botonEditar {
+    background-color: #007bff;
+    color: white;
+}
+
+.botonEditar:hover {
+    background-color: #0056b3;
+}
+
+.botonEliminar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.botonEliminar:hover {
+    background-color: #b02a37;
+}
+
+/* Para el formulario de edición */
+.edit-form {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 30px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+}
+
+.edit-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.edit-form form input,
+.edit-form form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.edit-form form button {
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    font-size: 18px;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.edit-form form button:hover {
+    background-color: #218838;
+}

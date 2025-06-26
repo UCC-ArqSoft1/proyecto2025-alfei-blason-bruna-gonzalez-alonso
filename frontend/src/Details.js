@@ -2,11 +2,18 @@ import React, { useEffect, useState } from "react";
 import "./Details.css";
 import {useNavigate, useParams} from "react-router-dom";
 
-function Details() {
+    function Details() {
     const { id } = useParams();
     const [detalle, setDetalle] = useState(null);
     const navigate = useNavigate();
     const [inscripcionExitosa, setInscripcionExitosa] = useState(false);
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
 
     const volverAlLogin = () => {
         navigate("/activities");
@@ -53,6 +60,28 @@ function Details() {
         }
     }
 
+    const handleEliminar = async () => {
+        const confirmacion = window.confirm("¿Estás seguro de eliminar esta actividad?");
+        if (!confirmacion) return;
+
+        try {
+            const response = await fetch(`http://localhost:8080/act_deportiva/${id}`, {
+                method: "DELETE"
+            });
+
+            if (response.ok) {
+                alert("¡Actividad eliminada!");
+                navigate("/activities");
+            } else {
+                alert("Error al eliminar actividad.");
+            }
+        } catch (error) {
+            console.error("Error al eliminar:", error);
+            alert("Error en el servidor.");
+        }
+    };
+
+
     useEffect(() => {
         console.log("cargado actividades");
         fetch(`http://localhost:8080/act_deportiva/${id}`)
@@ -75,6 +104,18 @@ function Details() {
 
             <div className="detalles">
                 <h2>Detalle Actividad</h2>
+
+                {getCookie("rol") === "ADMIN" && (
+                    <div className="admin-buttons">
+                        <button className="botonEditar" onClick={() => navigate(`/edit-activity/${id}`)}>
+                            ✏️ Editar Actividad
+                        </button>
+                        <button className="botonEliminar" onClick={handleEliminar}>
+                            🗑️ Eliminar Actividad
+                        </button>
+                    </div>
+                )}
+
                 <img src={detalle.Imagen} alt={detalle.Nombre} className="activity-image" />
                 <p><strong>Actividad:</strong>{detalle.NombreActividad}</p>
                 <p><strong>Descripción:</strong> {detalle.Descripcion}</p>
