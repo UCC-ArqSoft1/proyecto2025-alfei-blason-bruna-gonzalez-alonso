@@ -7,21 +7,6 @@ import (
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/domain"
 )
 
-/*func GetAct(IDact int) (int, string, error, string, int) {
-	ActDAO, err := clients.GetActbyId(IDact)
-	if err != nil {
-		return 0, "", fmt.Errorf("error getting Activity: %w", err), " ", 0
-	}
-	return ActDAO.IDActividad, ActDAO.Nombre, nil, ActDAO.NombreProfesor, ActDAO.Cupos
-}*/
-/*
-func GetTodasAct() ([]dao.ActDeportiva, error) {
-	ActDAO, err := clients.GetActs()
-	if err != nil {
-		return []dao.ActDeportiva{}, fmt.Errorf("error getting Activity: %w", err)
-	}
-	return ActDAO, nil
-}*/
 func GetAct(IDact int) (domain.ActDeportiva, []domain.Horario, error) {
 	ActDAO, err := clients.GetActbyId(IDact)
 	if err != nil {
@@ -49,7 +34,6 @@ func GetAct(IDact int) (domain.ActDeportiva, []domain.Horario, error) {
 	act.Descripcion = ActDAO.Descripcion
 	act.NombreProfesor = ActDAO.NombreProfesor
 	act.Foto = ActDAO.Foto
-	act.IdCategoria = ActDAO.IdCategoria
 	return act, hs, nil
 
 }
@@ -129,7 +113,6 @@ func GetTodasAct(filtro string) ([]domain.ActConHorarios, error) {
 			Descripcion:    act.Descripcion,
 			NombreProfesor: act.NombreProfesor,
 			Foto:           act.Foto,
-			IdCategoria:    act.IdCategoria,
 		}
 		actividadesConHorarios = append(actividadesConHorarios, domain.ActConHorarios{
 			Actividad: actss,
@@ -163,54 +146,3 @@ func EditarAct(act *dao.ActDeportiva) error {
 	}
 	return nil
 }
-
-// BuscarActividades filtra por nombre, categoría o HORA (HH:mm)
-// Si q == "", devuelve todas
-/*func FiltrarActividades(q string) ([]domain.ActDeportiva, error) {
-	var acts []dao.ActDeportiva
-
-	db := clients.DB.Model(&dao.Actividad{}).
-		Preload("Horarios")
-
-	if q != "" {
-		like := "%" + q + "%"
-		db = db.Joins("LEFT JOIN horarios h ON h.id_actividad = actividads.id").
-			Where(`
-                actividads.nombre      LIKE ?
-			   OR actividads.profesor  LIKE ?
-             OR DATE_FORMAT(h.hora_inicio, '%H:%i') LIKE ?`,
-				like, like, like).
-			Group("actividads.id") // evita duplicados
-	}
-
-	if err := db.Find(&acts).Error; err != nil {
-		return nil, err
-	}
-
-	// Map a domain + horarios
-	results := make([]domain.ActividadesDeportivas, 0, len(acts))
-	for _, a := range acts {
-		// armamos slice de horarios para la respuesta
-		hs := make([]domain.Horario, 0, len(a.Horarios))
-		for _, h := range a.Horarios {
-			hs = append(hs, domain.Horario{
-				Id:         h.Id,
-				Dia:        h.Dia,
-				HoraInicio: h.HoraInicio,
-				HoraFin:    h.HoraFin,
-			})
-		}
-
-		results = append(results, domain.ActividadesDeportivas{
-			Id:          a.Id,
-			Nombre:      a.Nombre,
-			Descripcion: a.Descripcion,
-			Categoria:   a.Categoria,
-			CupoTotal:   a.CupoTotal,
-			Profesor:    a.Profesor,
-			Imagen:      a.Imagen,
-			Horarios:    hs,
-	}
-
-	return results, nil
-}*/

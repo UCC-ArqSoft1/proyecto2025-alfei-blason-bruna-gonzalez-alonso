@@ -4,7 +4,6 @@ type ActDeportiva struct {
 	IDActividad    int       `json: "IDActividad"`
 	Nombre         string    `json: "Nombre"`
 	NombreProfesor string    `json: "NombreProfesor"`
-	IdCategoria    int       `json: "IdCategoria"`
 	Horarios       []Horario `json: "Horarios"`
 	Foto           string    `json: "Foto"`
 	Descripcion    string    `json: "Descripcion"`
@@ -41,9 +40,4 @@ type Inscripcion struct {
 	IdUsuario     int `json:"user"`
 	IdActividad   int `json:"activity"`
 	IdHorario     int `json:"Horario"`
-}
-
-type Categoria struct {
-	IdCategoria int    `json:"id"`
-	Nombre      string `json:"name"`
 }

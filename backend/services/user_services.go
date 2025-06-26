@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/Utils"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/clients"
-	//"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/domain"
 )
 
@@ -40,7 +39,6 @@ func GetActInscripto(IDuser int) ([]domain.ActDeportiva, []domain.Horario, error
 			IDActividad:    act.IDActividad,
 			Nombre:         act.Nombre,
 			NombreProfesor: act.NombreProfesor,
-			IdCategoria:    act.IdCategoria,
 			Foto:           act.Foto,
 			Descripcion:    act.Descripcion})
 

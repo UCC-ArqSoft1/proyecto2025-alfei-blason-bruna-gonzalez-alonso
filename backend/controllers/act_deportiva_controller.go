@@ -83,7 +83,6 @@ func CrearAct(ctx *gin.Context) {
 	actividad := &dao.ActDeportiva{
 		Nombre:         Act.Nombre,
 		NombreProfesor: Act.NombreProfesor,
-		IdCategoria:    Act.IdCategoria,
 		Horarios: []dao.Horario{{
 			Dia:           Act.Dia,
 			HorarioInicio: Act.HorarioInicio,
@@ -129,7 +128,6 @@ func EditarAct(ctx *gin.Context) {
 		IDActividad:    IDactividad,
 		Nombre:         act.Nombre,
 		NombreProfesor: act.NombreProfesor,
-		IdCategoria:    act.IdCategoria,
 		Horarios: []dao.Horario{{
 			Dia:           act.Dia,
 			HorarioInicio: act.HorarioInicio,

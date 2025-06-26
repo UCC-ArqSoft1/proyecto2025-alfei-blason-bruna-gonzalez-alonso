@@ -37,7 +37,6 @@ func init() {
 	DB.AutoMigrate(&dao.Horario{})
 	DB.AutoMigrate(&dao.ActDeportiva{}) //crea tablas en la base de datos
 	DB.AutoMigrate(&dao.Inscripcion{})
-	DB.AutoMigrate(&dao.Categoria{})
 
 	DB.Create(&dao.Usuario{
 		NombreUsuario:   "mateo123",
@@ -52,7 +51,6 @@ func init() {
 	DB.Create(&dao.ActDeportiva{
 		Nombre:         "Spinning",
 		NombreProfesor: "Emiliano",
-		IdCategoria:    1,
 		Descripcion: "Actividad cardiovascular que se realiza en una bicicleta fija al ritmo de la música, guiada por un instructor." +
 			" Mejora la resistencia, quema calorías y fortalece piernas y glúteos.",
 		Foto: "https://as01.epimg.net/deporteyvida/imagenes/2019/09/03/portada/1567536855_286772_1567537023_noticia_normal.jpg ",
@@ -75,7 +73,6 @@ func init() {
 	DB.Create(&dao.ActDeportiva{
 		Nombre:         "Yoga",
 		NombreProfesor: "Juan",
-		IdCategoria:    2,
 		Descripcion: "Disciplina física y mental originaria de la India que combina posturas, ejercicios de respiración" +
 			"y meditación para mejorar la flexibilidad, la fuerza, el equilibrio y el bienestar general.",
 		Foto: "https://phantom-elmundo.unidadeditorial.es/95aebb12721c45a14b949cca2d81c06d/crop/0x0/2475x1666/resize/1200/f/jpg/assets/multimedia/imagenes/2021/08/27/16300683348682.jpg ",
@@ -108,7 +105,6 @@ func init() {
 	DB.Create(&dao.ActDeportiva{
 		Nombre:         "Musculacion",
 		NombreProfesor: "José",
-		IdCategoria:    3,
 		Descripcion: "Es un tipo de entrenamiento físico que busca desarrollar y fortalecer los músculos mediante ejercicios con pesas y resistencia." +
 			" Mejora la fuerza, la salud y la forma del cuerpo.",
 		Foto: "https://www.rocfit.com/wp-content/uploads/Equipos-de-musculacion-para-entrenamiento-de-tren-inferior.jpg  ",
@@ -137,7 +133,6 @@ func init() {
 	DB.Create(&dao.ActDeportiva{
 		Nombre:         "Funcional",
 		NombreProfesor: "Paula",
-		IdCategoria:    4,
 		Descripcion: "Es una forma de entrenamiento que mejora la fuerza, el equilibrio y la movilidad con ejercicios que imitan movimientos de la vida diaria." +
 			" Ideal para ganar rendimiento y prevenir lesiones.",
 		Foto: " https://img.freepik.com/foto-gratis/gente-trabajando-interior-junto-pesas_23-2149175410.jpg?ga=GA1.1.414139249.1716316757&semt=ais_hybrid&w=740",
