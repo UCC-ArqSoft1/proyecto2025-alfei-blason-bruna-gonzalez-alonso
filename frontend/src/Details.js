@@ -114,10 +114,25 @@ function Details() {
 
     useEffect(() => {
         fetch(`http://localhost:8080/act_deportiva/${id}`)
-            .then(res => res.json())
-            .then(data => setDetalle(data))
-            .catch(err => console.error(err));
+            .then(async res => {
+                if (!res.ok) {
+                    const data = await res.json();
+                    alert(data.error || "La actividad no existe.");
+                    navigate("/activities");
+                    return;
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data) setDetalle(data);
+            })
+            .catch(err => {
+                console.error("Error al cargar detalle:", err);
+                alert("Error al cargar la actividad.");
+                navigate("/activities");
+            });
     }, [id]);
+
 
     useEffect(() => {
         if (detalle) {
@@ -140,7 +155,7 @@ function Details() {
             <div className="detalles">
                 <h2>Detalle Actividad</h2>
 
-                {getCookie("rol") === "ADMIN" && (
+                {getCookie("rol") === "ADMIN" && detalle?.NombreActividad && (
                     <div className="admin-buttons">
                         <button className="botonEditar" onClick={() => navigate(`/edit-activity/${id}`)}>
                             Editar Actividad
@@ -150,6 +165,7 @@ function Details() {
                         </button>
                     </div>
                 )}
+
 
                 <img src={detalle.Imagen} alt={detalle.Nombre} className="activity-image" />
                 <p><strong>Actividad:</strong> {detalle.NombreActividad}</p>

@@ -5,13 +5,15 @@
     border: 2px solid #ddd;
     border-radius: 12px;
     background-color: #f9f9f9;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
 }
 
 .create-form h2 {
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 25px;
+    font-size: 26px;
+    color: #333;
 }
 
 .create-form form input,
@@ -23,11 +25,31 @@
     border-radius: 6px;
     border: 1px solid #ccc;
     box-sizing: border-box;
+    transition: border-color 0.2s ease;
 }
 
 .create-form form textarea {
     resize: vertical;
     height: 100px;
+}
+
+.create-form form input:focus,
+.create-form form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.horario-block {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 4px solid #007bff;
+    background-color: #eef3ff;
+    border-radius: 8px;
+}
+
+.horario-block input {
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .create-form form button {
@@ -39,9 +61,23 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
 .create-form form button:hover {
     background-color: #0056b3;
+}
+
+/* ❗ Inputs inválidos */
+input.invalid,
+textarea.invalid {
+    border: 2px solid red;
+}
+
+/* ❗ Mensaje de error debajo del campo */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
 }
