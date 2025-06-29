@@ -51,24 +51,11 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.botonVolver:hover {
-    background-color:  #bc7900;
-}
-
-.inscripcion-exitosa {
-    background-color: #4CAF50;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
 .botonVolver {
     position: absolute;
     top: 20px;
     left: 20px;
-    background-color:  #bc7848;
+    background-color: #bc7848;
     color: white;
     border: none;
     padding: 10px 16px;
@@ -80,9 +67,22 @@
     transition: background-color 0.3s ease;
 }
 
+.botonVolver:hover {
+    background-color: #bc7900;
+}
 
+.inscripcion-exitosa {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* Botón principal de inscripción */
 .botonInscripcion {
-    color: aliceblue;
+    color: white;
     border: none;
     border-radius: 20px;
     background-color: #bc7848;
@@ -91,16 +91,26 @@
     font-size: 14px;
     cursor: pointer;
     display: block;
-    margin-top: -20px;
+    margin-top: 8px;
     margin-left: auto;
-    width: 120px;
+    width: 150px;
+    transition: background-color 0.3s ease;
 }
 
-.activity-image {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 10px;
+.botonInscripcion:hover:not(:disabled) {
+    background-color: #a55d32;
 }
+
+
+.botonInscripcion.inscripto {
+    background-color: gray !important;
+    color: white;
+    cursor: not-allowed;
+    font-weight: bold;
+    opacity: 0.9;
+}
+
+
 .botonInscripcion:disabled {
     background-color: #aaa;
     cursor: not-allowed;
@@ -108,3 +118,4 @@
     font-weight: bold;
     opacity: 0.8;
 }
+

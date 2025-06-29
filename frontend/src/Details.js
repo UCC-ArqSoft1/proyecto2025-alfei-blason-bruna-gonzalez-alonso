@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./Details.css";
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Details() {
     const { id } = useParams();
     const [detalle, setDetalle] = useState(null);
     const navigate = useNavigate();
     const [inscripcionExitosa, setInscripcionExitosa] = useState(false);
-    const [inscripcionesRealizadas, setInscripcionesRealizadas] = useState(() => {
-        const guardadas = localStorage.getItem("inscripciones");
-        return guardadas ? JSON.parse(guardadas) : [];
-    });
+    const [horariosInscriptos, setHorariosInscriptos] = useState(new Set());
 
     function getCookie(name) {
         const value = `; ${document.cookie}`;
@@ -23,7 +20,40 @@ function Details() {
         navigate("/activities");
     };
 
-    const handleClick = async (id_horario) => {
+    const verificarInscripcionesReales = async () => {
+        try {
+            const userID = getCookie('user_id');
+            if (!userID || !detalle) {
+                setHorariosInscriptos(new Set());
+                return;
+            }
+
+            const response = await fetch(`http://localhost:8080/users/${userID}/inscripciones`);
+            if (response.ok) {
+                const inscripciones = await response.json();
+                const horariosInscriptosSet = new Set();
+
+                inscripciones.forEach(inscripcion => {
+                    detalle.Horarios.forEach(horario => {
+                        if (inscripcion.IDActividad === parseInt(id) &&
+                            horario.Dia === inscripcion.Dia &&
+                            horario.HorarioInicio === inscripcion.HoraInicio) {
+                            horariosInscriptosSet.add(horario.IdHorario);
+                        }
+                    });
+                });
+
+                setHorariosInscriptos(horariosInscriptosSet);
+            } else {
+                setHorariosInscriptos(new Set());
+            }
+        } catch (error) {
+            console.error("Error verificando inscripciones:", error);
+            setHorariosInscriptos(new Set());
+        }
+    };
+
+    const handleInscribirse = async (id_horario) => {
         try {
             const userID = getCookie('user_id');
             const token = getCookie('token');
@@ -34,16 +64,12 @@ function Details() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({id_horario: id_horario, id_actividad: parseInt(id)})
+                body: JSON.stringify({ id_horario: id_horario, id_actividad: parseInt(id) })
             });
 
             if (response.ok) {
                 setInscripcionExitosa(true);
-                setInscripcionesRealizadas(prev => {
-                    const nuevas = [...prev, id_horario];
-                    localStorage.setItem("inscripciones", JSON.stringify(nuevas));
-                    return nuevas;
-                });
+                setHorariosInscriptos(prev => new Set([...prev, id_horario]));
 
                 const nuevoDetalle = { ...detalle };
                 nuevoDetalle.Horarios = detalle.Horarios.map((h) =>
@@ -59,14 +85,18 @@ function Details() {
         }
     };
 
-
     const handleEliminar = async () => {
         const confirmacion = window.confirm("¿Estás seguro de eliminar esta actividad?");
         if (!confirmacion) return;
 
+        const token = getCookie('token'); // Asegurate de tener el token
+
         try {
             const response = await fetch(`http://localhost:8080/act_deportiva/${id}`, {
-                method: "DELETE"
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             });
 
             if (response.ok) {
@@ -81,19 +111,21 @@ function Details() {
         }
     };
 
-    
-
 
     useEffect(() => {
-        console.log("cargado actividades");
         fetch(`http://localhost:8080/act_deportiva/${id}`)
             .then(res => res.json())
             .then(data => setDetalle(data))
             .catch(err => console.error(err));
     }, [id]);
 
-    if (!detalle) return <p>Cargando detalles...</p>;
+    useEffect(() => {
+        if (detalle) {
+            verificarInscripcionesReales();
+        }
+    }, [detalle]);
 
+    if (!detalle) return <p>Cargando detalles...</p>;
 
     return (
         <>
@@ -120,40 +152,43 @@ function Details() {
                 )}
 
                 <img src={detalle.Imagen} alt={detalle.Nombre} className="activity-image" />
-                <p><strong>Actividad:</strong>{detalle.NombreActividad}</p>
+                <p><strong>Actividad:</strong> {detalle.NombreActividad}</p>
                 <p><strong>Descripción:</strong> {detalle.Descripcion}</p>
                 <p><strong>Profesor:</strong> {detalle.NombreProfesor}</p>
                 <p><strong>Horarios:</strong></p>
                 <ul>
-                    {Array.isArray(detalle.Horarios) && detalle.Horarios.map((h, i) => {
-                        const [hIni, mIni] = h.HorarioInicio.split(":").map(Number); //split separa y map number convierte en string
+                    {detalle.Horarios.map((h, i) => {
+                        const [hIni, mIni] = h.HorarioInicio.split(":").map(Number);
                         const [hFin, mFin] = h.HorarioFin.split(":").map(Number);
-                        const minutosInicio = hIni * 60 + mIni;
-                        const minutosFin = hFin * 60 + mFin;
-                        const duracionMin = minutosFin - minutosInicio;
-                        const duracion = `${Math.floor(duracionMin / 60)}h ${duracionMin % 60}min`; //convierte la duracion a horas y minutos
+                        const duracionMin = (hFin * 60 + mFin) - (hIni * 60 + mIni);
+                        const duracion = `${Math.floor(duracionMin / 60)}h ${duracionMin % 60}min`;
+                        const yaInscripto = horariosInscriptos.has(h.IdHorario);
                         const cuposDisponibles = h.Cupos > 0;
-
-                        const yaInscripto = inscripcionesRealizadas.includes(h.IdHorario);
 
                         return (
                             <li key={i}>
                                 {h.Dia} de {h.HorarioInicio} a {h.HorarioFin} ({duracion}) Cupos: {h.Cupos}
-                                <button
-                                    type="submit"
-                                    className="botonInscripcion"
-                                    disabled={!cuposDisponibles || yaInscripto}
-                                    onClick={() => handleClick(h.IdHorario)}
-                                    style={{
-                                        backgroundColor: yaInscripto ? "gray" : "",
-                                        cursor: yaInscripto ? "not-allowed" : "pointer"
-                                    }}
-                                >
-                                    {yaInscripto ? "Inscripto" : (cuposDisponibles ? "Inscribirme" : "Sin cupos")}
-                                </button>
+                                {yaInscripto ? (
+                                    <>
+                                        <button className="botonInscripcion inscripto" disabled>Inscripto</button>
+                                        <button
+                                            className="botonCancelar"
+                                            onClick={() => handleDesinscribirse(h.IdHorario)}
+                                        >
+                                            Cancelar inscripción
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button
+                                        className="botonInscripcion"
+                                        disabled={!cuposDisponibles}
+                                        onClick={() => handleInscribirse(h.IdHorario)}
+                                    >
+                                        {cuposDisponibles ? "Inscribirme" : "Sin cupos"}
+                                    </button>
+                                )}
                             </li>
                         );
-
                     })}
                 </ul>
             </div>
