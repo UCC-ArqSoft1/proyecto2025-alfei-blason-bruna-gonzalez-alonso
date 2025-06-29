@@ -171,12 +171,6 @@ function Details() {
                                 {yaInscripto ? (
                                     <>
                                         <button className="botonInscripcion inscripto" disabled>Inscripto</button>
-                                        <button
-                                            className="botonCancelar"
-                                            onClick={() => handleDesinscribirse(h.IdHorario)}
-                                        >
-                                            Cancelar inscripción
-                                        </button>
                                     </>
                                 ) : (
                                     <button
