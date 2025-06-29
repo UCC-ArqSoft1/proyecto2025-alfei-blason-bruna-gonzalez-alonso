@@ -56,7 +56,7 @@ function MyActivities() {
                         <h3>{act.NombreActividad}</h3>
                         <p><strong>Profesor:</strong> {act.NombreProfesor}</p>
                         <p><strong>Día:</strong> {act.Dia}</p>
-                        <p><strong>Horario:</strong> {act.HorarioInicio} - {act.HorarioFin}</p>
+                        <p><strong>Horario:</strong> {act.HoraInicio || "Sin definir"} - {act.HoraFin || "Sin definir"}</p>
                         <p><strong>Cupos:</strong> {act.Cupos}</p>
                     </div>
                 ))
