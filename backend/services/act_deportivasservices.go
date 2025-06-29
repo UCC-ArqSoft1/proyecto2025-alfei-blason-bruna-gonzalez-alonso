@@ -142,7 +142,7 @@ func EliminarActividad(idact int) error {
 func EditarAct(act *dao.ActDeportiva) error {
 	err := clients.EditarAct(act)
 	if err != nil {
-		return fmt.Errorf("error generando Actividad: %w", err)
+		return fmt.Errorf("error editando actividad: %w", err)
 	}
 	return nil
 }

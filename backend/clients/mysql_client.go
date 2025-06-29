@@ -338,12 +338,28 @@ func Eliminarinscripcion(idiscrip int) error {
 }
 
 func EditarAct(act *dao.ActDeportiva) error {
-	tnx := DB.Save(&act)
-	if tnx.Error != nil {
-		return fmt.Errorf("error editando actividad %w", act, tnx.Error)
-	}
-	if tnx.RowsAffected == 0 {
-		return fmt.Errorf("no se encontró actividad con ID %d", act.IDActividad)
-	}
-	return nil
+	return DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&dao.ActDeportiva{}).
+			Where("id_actividad = ?", act.IDActividad).
+			Updates(map[string]interface{}{
+				"nombre":          act.Nombre,
+				"nombre_profesor": act.NombreProfesor,
+				"foto":            act.Foto,
+				"descripcion":     act.Descripcion,
+			}).Error; err != nil {
+			return fmt.Errorf("error actualizando actividad: %w", err)
+		}
+		if err := tx.Where("id_actividad = ?", act.IDActividad).
+			Delete(&dao.Horario{}).Error; err != nil {
+			return fmt.Errorf("error eliminando horarios existentes: %w", err)
+		}
+		for _, horario := range act.Horarios {
+			horario.IdActividad = act.IDActividad
+			if err := tx.Create(&horario).Error; err != nil {
+				return fmt.Errorf("error creando nuevo horario: %w", err)
+			}
+		}
+
+		return nil
+	})
 }
