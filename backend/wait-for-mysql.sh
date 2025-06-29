@@ -1,1 +1,0 @@
-﻿#!/bin/sh# wait-for-mysql.shset -ehost="$DB_HOST"port="$DB_PORT"cmd="$@"until nc -z -v -w30 $host $portdo  echo "Esperando a que mysql:3306 estÃ© disponible..."  sleep 1doneecho "MySQL estÃ¡ disponible"exec $cmd

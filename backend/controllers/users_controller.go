@@ -50,7 +50,7 @@ func Eliminarinscripcion(ctx *gin.Context) {
 
 	idinscripcion, err := strconv.Atoi(idParam)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID martina"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID "})
 		return
 	}
 	error := services.Eliminarinscripcion(idinscripcion)
@@ -58,7 +58,7 @@ func Eliminarinscripcion(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": error.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "La actividad se elimino correctamente"})
+	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "La inscripcion se elimino correctamente"})
 }
 func GetActInscripcion(ctx *gin.Context) {
 	idParam := ctx.Param("id")
