@@ -13,17 +13,17 @@ var (
 )
 
 func init() {
-	/*user := "root"
+	user := "root"
 	password := "Agus2025uccBD-"
 	host := "localhost"
-	port := 3306*/
+	port := 3306
 	database := "backend"
 
-	user := "root"
+	/*user := "root"
 	password := "17122004Ff"
 
 	host := "localhost"
-	port := 3306
+	port := 3306*/
 
 	/*
 		user := os.Getenv("DB_USER")
@@ -335,6 +335,14 @@ func Eliminarinscripcion(idiscrip int) error {
 		return fmt.Errorf("error eliminando actividad con ID %d: %w", idiscrip, txn2.Error)
 	}
 	return nil
+}
+
+func EliminarInscripcionPorUsuarioYHorario(idUsuario int, idHorario int) error {
+	var inscripcion dao.Inscripcion
+	if err := DB.Where("id_usuario = ? AND id_horario = ?", idUsuario, idHorario).First(&inscripcion).Error; err != nil {
+		return fmt.Errorf("Error: No se encontró la inscripción: %w", err)
+	}
+	return Eliminarinscripcion(inscripcion.IdInscripcion)
 }
 
 func EditarAct(act *dao.ActDeportiva) error {

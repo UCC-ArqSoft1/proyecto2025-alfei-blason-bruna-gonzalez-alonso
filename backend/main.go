@@ -13,6 +13,7 @@ func main() {
 	router.GET("/act_deportiva", controllers.ObtenerTodasAct)
 	router.GET("/users/:id/inscripciones", controllers.GetActInscripcion)
 	router.POST("/users/:id/inscripciones", controllers.InscripcionActividad)
+	router.DELETE("/users/:id/inscripciones", controllers.DesinscripcionActividad)
 	router.POST("/act_deportiva", controllers.CrearAct)
 	router.PUT("/act_deportiva/:id", controllers.EditarAct)
 	router.DELETE("/act_deportiva/:id", controllers.EliminarAct)

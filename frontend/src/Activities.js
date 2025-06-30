@@ -75,14 +75,6 @@ function Activities() {
             <div className="container">
                 <h1 className="title">Bienvenido a la página de Actividades</h1>
 
-                <input
-                    type="text"
-                    placeholder="Buscar por palabra clave, horario o profesor"
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)} // Actualiza el estado del término de búsqueda
-                    className="search-input"
-                />
-
                 {getCookie("rol") === "ADMIN" && (
                     <button
                         className="botonCrear"
@@ -91,6 +83,15 @@ function Activities() {
                         Crear nueva actividad
                     </button>
                 )}
+
+                <input
+                    type="text"
+                    placeholder="Buscar por palabra clave, horario o profesor"
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)} // Actualiza el estado del término de búsqueda
+                    className="search-input"
+                />
+
 
 
                 {Array.isArray(filteredActividades) && filteredActividades.length === 0 ? (

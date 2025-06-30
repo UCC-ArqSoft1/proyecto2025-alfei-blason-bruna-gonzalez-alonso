@@ -91,7 +91,7 @@
     margin: 20px 0;
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #8f8f8f;
+    background-color: #b66429;
     color: white;
     border: none;
     border-radius: 8px;
@@ -100,7 +100,7 @@
 }
 
 .botonCrear:hover {
-    background-color: #138496;
+    background-color: #bc7848;
 }
 
 .header-buttons {

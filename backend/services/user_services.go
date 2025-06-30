@@ -72,3 +72,11 @@ func Eliminarinscripcion(idinscrip int) error {
 	}
 	return nil
 }
+
+func EliminarInscripcionPorUsuarioYHorario(idUsuario int, idHorario int) error {
+	err := clients.EliminarInscripcionPorUsuarioYHorario(idUsuario, idHorario)
+	if err != nil {
+		return fmt.Errorf("error eliminando la inscripción: %w", err)
+	}
+	return nil
+}

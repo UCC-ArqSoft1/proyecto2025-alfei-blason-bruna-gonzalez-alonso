@@ -7,6 +7,7 @@ function Details() {
     const [detalle, setDetalle] = useState(null);
     const navigate = useNavigate();
     const [inscripcionExitosa, setInscripcionExitosa] = useState(false);
+    const [desinscripcionExitosa, setDesinscripcionExitosa] = useState(false);
     const [horariosInscriptos, setHorariosInscriptos] = useState(new Set());
 
     function getCookie(name) {
@@ -69,6 +70,7 @@ function Details() {
 
             if (response.ok) {
                 setInscripcionExitosa(true);
+                setDesinscripcionExitosa(false);
                 setHorariosInscriptos(prev => new Set([...prev, id_horario]));
 
                 const nuevoDetalle = { ...detalle };
@@ -82,6 +84,44 @@ function Details() {
 
         } catch (error) {
             console.error("Inscripción fallida", error);
+        }
+    };
+
+    const handleDesinscribirse = async (id_horario) => {
+        try {
+            const userID = getCookie('user_id');
+            const token = getCookie('token');
+
+            const response = await fetch(`http://localhost:8080/users/${userID}/inscripciones`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ id_horario: id_horario })
+            });
+
+            if (response.ok) {
+                setDesinscripcionExitosa(true);
+                setInscripcionExitosa(false);
+
+                // Eliminar el horario de la lista de horarios inscritos
+                const nuevosHorariosInscriptos = new Set(horariosInscriptos);
+                nuevosHorariosInscriptos.delete(id_horario);
+                setHorariosInscriptos(nuevosHorariosInscriptos);
+
+                // Actualizar los cupos disponibles
+                const nuevoDetalle = { ...detalle };
+                nuevoDetalle.Horarios = detalle.Horarios.map((h) =>
+                    h.IdHorario === id_horario ? { ...h, Cupos: h.Cupos + 1 } : h
+                );
+                setDetalle(nuevoDetalle);
+            } else {
+                console.error("Desinscripción fallida");
+            }
+
+        } catch (error) {
+            console.error("Desinscripción fallida", error);
         }
     };
 
@@ -152,6 +192,12 @@ function Details() {
                 </div>
             )}
 
+            {desinscripcionExitosa && (
+                <div className="inscripcion-exitosa">
+                    ¡Desinscripción exitosa!
+                </div>
+            )}
+
             <div className="detalles">
                 <h2>Detalle Actividad</h2>
 
@@ -186,7 +232,12 @@ function Details() {
                                 {h.Dia} de {h.HorarioInicio} a {h.HorarioFin} ({duracion}) Cupos: {h.Cupos}
                                 {yaInscripto ? (
                                     <>
-                                        <button className="botonInscripcion inscripto" disabled>Inscripto</button>
+                                        <button 
+                                            className="botonInscripcion inscripto"
+                                            onClick={() => handleDesinscribirse(h.IdHorario)}
+                                        >
+                                            Desinscribirme
+                                        </button>
                                     </>
                                 ) : (
                                     <button

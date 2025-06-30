@@ -89,6 +89,7 @@ function CreateActivity() {
 
     return (
         <div className="create-form">
+            <button onClick={() => navigate(-1)} className="botonVolver">← Volver</button>
             <h2>Crear Actividad</h2>
             <form onSubmit={handleSubmit}>
                 <input

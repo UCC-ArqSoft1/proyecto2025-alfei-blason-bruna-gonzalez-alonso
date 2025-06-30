@@ -60,6 +60,32 @@ func Eliminarinscripcion(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "La inscripcion se elimino correctamente"})
 }
+
+type DesinscripcionReq struct {
+	IdHorario int `json:"id_horario"`
+}
+
+func DesinscripcionActividad(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	idUsuario, err := strconv.Atoi(idParam)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id del usuario invalido"})
+		return
+	}
+
+	var req DesinscripcionReq
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "JSON inválido"})
+		return
+	}
+
+	err = services.EliminarInscripcionPorUsuarioYHorario(idUsuario, req.IdHorario)
+	if err != nil {
+		ctx.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"Mensaje": "Desinscripción exitosa"})
+}
 func GetActInscripcion(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	idusuario, err := strconv.Atoi(idParam)
