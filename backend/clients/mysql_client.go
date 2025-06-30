@@ -138,7 +138,7 @@ func init() {
 		Horarios: []dao.Horario{
 			{
 				Dia:           "Jueves",
-				HorarioInicio: "8:00",
+				HorarioInicio: "08:00",
 				HorarioFin:    "10:00",
 				Cupos:         20,
 			},
@@ -178,8 +178,8 @@ func init() {
 			},
 			{
 				Dia:           "Lunes",
-				HorarioInicio: "7:00",
-				HorarioFin:    "9:00",
+				HorarioInicio: "07:00",
+				HorarioFin:    "09:00",
 				Cupos:         10,
 			},
 		},
