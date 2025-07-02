@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"os"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/Utils"
 	"proyecto2025-alfei-blason-bruna-gonzalez-alonso/dao"
+	"strconv"
 )
 
 var (
@@ -13,43 +15,42 @@ var (
 )
 
 func init() {
-	user := "root"
+	/*user := "root"
 	password := "Agus2025uccBD-"
 	host := "localhost"
 	port := 3306
 	database := "backend"
 
-	/*user := "root"
+	user := "root"
 	password := "17122004Ff"
 
 	host := "localhost"
 	port := 3306*/
 
-	/*
-		user := os.Getenv("DB_USER")
-		password := os.Getenv("DB_PASSWORD")
-		host := os.Getenv("DB_HOST")
-		port := os.Getenv("DB_PORT")
-		//database := os.Getenv("BD_NAME")
-		database := "backend"
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	//database := os.Getenv("BD_NAME")
+	database := "backend"
 
-		if port == "" {
-			port = "3306" // default
-		}
-		portstr, err := strconv.Atoi(port)
-		if err != nil {
-			panic(fmt.Sprintf("puerto inválido: %v", err))
-		}
-
-		dsn := fmt.Sprintf(
-			"%s:%s@tcp(%s:%d)/%s?parseTime=true&charset=utf8mb4&loc=Local",
-			user, password, host, portstr, database)*/
+	if port == "" {
+		port = "3306" // default
+	}
+	portstr, err := strconv.Atoi(port)
+	if err != nil {
+		panic(fmt.Sprintf("puerto inválido: %v", err))
+	}
 
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?parseTime=true&charset=utf8mb4&loc=Local",
+		user, password, host, portstr, database)
+
+	/*dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%d)/%s?parseTime=true&charset=utf8mb4&loc=Local",
 		user, password, host, port, database)
 
-	var err error
+	var err error*/
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(fmt.Sprintf("error conectando a DB: %v", err))
