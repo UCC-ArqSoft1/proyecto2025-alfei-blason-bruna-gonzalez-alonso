@@ -39,7 +39,6 @@ function EditActivity() {
             });
     }, [id]);
 
-
     const handleChange = (e) => {
         setActividad({ ...actividad, [e.target.name]: e.target.value });
     };
@@ -49,6 +48,13 @@ function EditActivity() {
         const newHorarios = [...actividad.horarios];
         newHorarios[index][name] = name === "cupos" ? parseInt(value) : value;
         setActividad({ ...actividad, horarios: newHorarios });
+    };
+
+    const agregarHorario = () => {
+        setActividad({
+            ...actividad,
+            horarios: [...actividad.horarios, { dia: "", horarioInicio: "", horarioFin: "", cupos: 0 }]
+        });
     };
 
     const esHoraValida = (hora) => /^([01]\d|2[0-3]):([0-5]\d)$/.test(hora);
@@ -104,12 +110,14 @@ function EditActivity() {
 
     return (
         <div className="create-form">
+            <button onClick={() => navigate(-1)} className="botonVolver">← Volver</button>
             <h2>Editar Actividad</h2>
             <form onSubmit={handleSubmit}>
                 <input
                     name="nombre"
                     value={actividad.nombre}
                     onChange={handleChange}
+                    placeholder="Nombre de la actividad"
                     className={errores.nombre ? "invalid" : ""}
                 />
                 {errores.nombre && <div className="error-message">{errores.nombre}</div>}
@@ -118,6 +126,7 @@ function EditActivity() {
                     name="nombreProfesor"
                     value={actividad.nombreProfesor}
                     onChange={handleChange}
+                    placeholder="Nombre del profesor"
                     className={errores.nombreProfesor ? "invalid" : ""}
                 />
                 {errores.nombreProfesor && <div className="error-message">{errores.nombreProfesor}</div>}
@@ -126,12 +135,14 @@ function EditActivity() {
                     name="foto"
                     value={actividad.foto}
                     onChange={handleChange}
+                    placeholder="URL de imagen (opcional)"
                 />
 
                 <textarea
                     name="descripcion"
                     value={actividad.descripcion}
                     onChange={handleChange}
+                    placeholder="Descripción"
                     className={errores.descripcion ? "invalid" : ""}
                 />
                 {errores.descripcion && <div className="error-message">{errores.descripcion}</div>}
@@ -142,11 +153,13 @@ function EditActivity() {
                             name="dia"
                             value={h.dia}
                             onChange={(e) => handleHorarioChange(i, e)}
+                            placeholder="Día (ej: Lunes)"
                         />
                         <input
                             name="horarioInicio"
                             value={h.horarioInicio}
                             onChange={(e) => handleHorarioChange(i, e)}
+                            placeholder="Horario Inicio (HH:MM)"
                             className={errores[`horarioInicio${i}`] ? "invalid" : ""}
                         />
                         {errores[`horarioInicio${i}`] && (
@@ -157,6 +170,7 @@ function EditActivity() {
                             name="horarioFin"
                             value={h.horarioFin}
                             onChange={(e) => handleHorarioChange(i, e)}
+                            placeholder="Horario Fin (HH:MM)"
                             className={errores[`horarioFin${i}`] ? "invalid" : ""}
                         />
                         {errores[`horarioFin${i}`] && (
@@ -168,6 +182,7 @@ function EditActivity() {
                             type="number"
                             value={h.cupos}
                             onChange={(e) => handleHorarioChange(i, e)}
+                            placeholder="Cupos"
                             className={errores[`cupos${i}`] ? "invalid" : ""}
                         />
                         {errores[`cupos${i}`] && (
@@ -176,7 +191,9 @@ function EditActivity() {
                     </div>
                 ))}
 
-                <div className="button-group">
+                <button type="button" onClick={agregarHorario}>+ Agregar horario</button>
+
+                <div className="button-group" style={{ marginTop: "20px" }}>
                     <button type="submit">Guardar cambios</button>
                     <button type="button" onClick={() => navigate("/activities")}>Cancelar</button>
                 </div>
@@ -184,5 +201,4 @@ function EditActivity() {
         </div>
     );
 }
-
 export default EditActivity;
