@@ -18,10 +18,9 @@ type CustomClaims struct {
 }
 
 func GenerateJWT(userID int, isAdmin bool) (string, error) {
-	// Setear expiracion
+
 	expirationTime := time.Now().Add(jwtDuration)
 
-	// Construir los claims
 	claims := CustomClaims{
 		UserID:  userID,
 		IsAdmin: isAdmin,
@@ -35,10 +34,8 @@ func GenerateJWT(userID int, isAdmin bool) (string, error) {
 		},
 	}
 
-	// Crear el token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	// Firmar el token
 	tokenString, err := token.SignedString([]byte(jwtSecret))
 	if err != nil {
 		return "", fmt.Errorf("error generating token: %w", err)
